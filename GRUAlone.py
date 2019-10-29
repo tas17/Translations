@@ -165,7 +165,7 @@ print("TESTING VALUES", preproc_french_sentences.shape[-2], y_train.shape[-2])
 
 # Train the neural network
 simple_rnn_model = simple_model(
-    tmp_x.shape,
+    X_train.shape,
     max_french_sequence_length,
     english_vocab_size,
     french_vocab_size)
