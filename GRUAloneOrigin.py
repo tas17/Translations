@@ -57,10 +57,16 @@ print("\nOriginal text:")
 print(english_sentences[:1])
 
 
-print("Prediction 2:")
-print(logits_to_text(simple_rnn_model.predict(tmp_x[:1])[0], french_tokenizer))
+def predict(i):
+    print("Predicting i (" + str(i) + "):")
+    print(logits_to_text(simple_rnn_model.predict(tmp_x[:1])[i], french_tokenizer))
+    print(sequence_to_text(list(preproc_french_sentences[i].reshape(preproc_french_sentences[i].shape[0])),
+                           french_tokenizer))
+    print(sequence_to_text(list(preproc_english_sentences[i].reshape(preproc_english_sentences[i].shape[0])),
+                           english_tokenizer))
 
-print(sequence_to_text(list(preproc_french_sentences[0].reshape(preproc_french_sentences[0].shape[0])), french_tokenizer))
-print(sequence_to_text(list(preproc_english_sentences[0].reshape(preproc_english_sentences[0].shape[0])), english_tokenizer))
 
+predict(1)
+predict(2)
+predict(0)
 
