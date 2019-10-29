@@ -57,9 +57,11 @@ print("\nOriginal text:")
 print(english_sentences[:1])
 
 
+print(tmp_x.shape)
+print(tmp_x[0].shape)
 def predict(i):
     print("Predicting i (" + str(i) + "):")
-    print(logits_to_text(simple_rnn_model.predict(tmp_x[:1])[i], french_tokenizer))
+    print(logits_to_text(simple_rnn_model.predict(tmp_x[i].reshape((-1, preproc_french_sentences.shape[-2], 1)))[0], french_tokenizer))
     print(sequence_to_text(list(preproc_french_sentences[i].reshape(preproc_french_sentences[i].shape[0])),
                            french_tokenizer))
     print(sequence_to_text(list(preproc_english_sentences[i].reshape(preproc_english_sentences[i].shape[0])),
