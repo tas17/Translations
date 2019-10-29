@@ -38,13 +38,13 @@ X_train = X_train.reshape((-1, y_train.shape[-2], 1))
 # Train the neural network
 simple_rnn_model = simple_model(
     X_train.shape,
-    french_vocab_size)
+    french_vocab_size+1)
 
 print('fitting shapes', X_train.shape, "(", X_train.shape[:1], ")", french_vocab_size, preproc_french_sentences.shape)
 
 print(simple_rnn_model.summary())
 
-simple_rnn_model.fit(X_train, y_train, batch_size=1024, epochs=10, validation_split=0.2)
+simple_rnn_model.fit(X_train, y_train, batch_size=1024, epochs=30, validation_split=0.2)
 
 simple_rnn_model.save("models/GRUAlone")
 
