@@ -10,6 +10,7 @@ from keras.layers.embeddings import Embedding
 from keras.optimizers import Adam
 from keras.losses import sparse_categorical_crossentropy
 from sklearn.model_selection import train_test_split
+from keras.models import load_model
 
 
 # Load English data
@@ -159,17 +160,9 @@ tmp_x = pad(preproc_english_sentences, max_french_sequence_length)
 tmp_x = tmp_x.reshape((-1, preproc_french_sentences.shape[-2], 1))
 
 # Train the neural network
-simple_rnn_model = simple_model(
-    tmp_x.shape,
-    max_french_sequence_length,
-    english_vocab_size,
-    french_vocab_size)
-
+simple_rnn_model = load_model("models/GRUAlone")
 print(simple_rnn_model.summary())
 
-simple_rnn_model.fit(tmp_x, preproc_french_sentences, batch_size=1024, epochs=10, validation_split=0.2)
-
-simple_rnn_model.save("models/GRUAlone")
 # Print prediction(s)
 print(logits_to_text(simple_rnn_model.predict(tmp_x[:1])[0], french_tokenizer))
 
