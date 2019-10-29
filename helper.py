@@ -43,6 +43,12 @@ def preprocess(x, y):
     return preprocess_x, preprocess_y, x_tk, y_tk
 
 
+def sequence_to_text(s, tokenizer):
+    index_to_words = {id: word for word, id in tokenizer.word_index.items()}
+    index_to_words[0] = '<PAD>'
+    return ' ' .join([index_to_words[k] for k in s]) 
+
+
 def logits_to_text(logits, tokenizer):
     """
     Turn logits from a neural network into text using the tokenizer
@@ -54,4 +60,5 @@ def logits_to_text(logits, tokenizer):
     index_to_words[0] = '<PAD>'
 
     return ' '.join([index_to_words[prediction] for prediction in np.argmax(logits, 1)])
+
 

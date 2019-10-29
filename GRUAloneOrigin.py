@@ -1,7 +1,7 @@
 from loader import load_data
 import collections
 import numpy as np
-from helper import tokenize, pad, preprocess, logits_to_text
+from helper import tokenize, pad, preprocess, sequence_to_text, logits_to_text
 from models import simple_model
 from sklearn.model_selection import train_test_split
 
@@ -31,12 +31,13 @@ print("French vocabulary size:", french_vocab_size)
 tmp_x = pad(preproc_english_sentences, max_french_sequence_length)
 tmp_x = tmp_x.reshape((-1, preproc_french_sentences.shape[-2], 1))
 
+
 # Train the neural network
 simple_rnn_model = simple_model(
     tmp_x.shape,
     french_vocab_size)
 
-print('fitting shapes', tmp_x.shape, "(", tmp_x.shape[:1], ")", french_vocab_size, preproc_french_sentences)
+print('fitting shapes', tmp_x.shape, "(", tmp_x.shape[:1], ")", french_vocab_size, preproc_french_sentences.shape)
 
 print(simple_rnn_model.summary())
 
@@ -45,8 +46,9 @@ simple_rnn_model.fit(tmp_x, preproc_french_sentences, batch_size=1024, epochs=10
 simple_rnn_model.save("models/GRUAlone")
 
 # Print prediction(s)
-print("Prediction:")
+print("\nPrediction:")
 print(logits_to_text(simple_rnn_model.predict(tmp_x[:1])[0], french_tokenizer))
+print("logit shape :", simple_rnn_model.predict(tmp_x[:1])[0].shape)
 
 print("\nCorrect Translation:")
 print(french_sentences[:1])
@@ -55,15 +57,10 @@ print("\nOriginal text:")
 print(english_sentences[:1])
 
 
-print("Prediction:")
+print("Prediction 2:")
 print(logits_to_text(simple_rnn_model.predict(tmp_x[:1])[0], french_tokenizer))
 
-print("\nCorrect Translation:")
-print(logits_to_text(preproc_french_sentences[:1], french_tokenizer))
-
-print("\nOriginal text:")
-print(logits_to_text(preproc_english_sentences[:1], english_tokenizer))
-
-
+print(sequence_to_text(list(preproc_french_sentences[0].reshape(preproc_french_sentences[0].shape[0])), french_tokenizer))
+print(sequence_to_text(list(preproc_english_sentences[0].reshape(preproc_english_sentences[0].shape[0])), english_tokenizer))
 
 
