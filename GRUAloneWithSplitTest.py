@@ -33,6 +33,7 @@ tmp_x = pad(preproc_english_sentences, max_french_sequence_length)
 X_train, X_test, y_train, y_test = train_test_split(tmp_x, preproc_french_sentences)
 
 X_train = X_train.reshape((-1, y_train.shape[-2], 1))
+X_test = X_test.reshape((-1, y_test.shape[-2], 1))
 
 
 # Train the neural network
@@ -51,16 +52,33 @@ simple_rnn_model.save("models/GRUAlone")
 # Print prediction(s)
 print(X_train.shape)
 print(X_train[0].shape)
-def predict(i):
+
+
+def predict_verbose(i, X, Y):
     print("Predicting i (" + str(i) + "):")
-    print(logits_to_text(simple_rnn_model.predict(X_train[i].reshape((-1, y_train.shape[-2], 1)))[0], french_tokenizer))
-    print(sequence_to_text(list(y_train[i].reshape(y_train[i].shape[0])),
-                           french_tokenizer))
-    print(sequence_to_text(list(X_train[i].reshape(X_train[i].shape[0])),
+    print('Original sentence')
+    print(sequence_to_text(list(X[i].reshape(X[i].shape[0])),
                            english_tokenizer))
+    print("Predicted translation ")
+    print(logits_to_text(simple_rnn_model.predict(X[i].reshape((-1, Y.shape[-2], 1)))[0], french_tokenizer))
+    print('Correct Translation')
+    print(sequence_to_text(list(Y[i].reshape(Y[i].shape[0])),
+                           french_tokenizer))
 
 
-predict(1)
-predict(2)
-predict(0)
+def evaluate(i, X, Y):
+    pred = english_tokenizer.texts_to_sequences(logits_to_text(simple_rnn_model.predict(X[i].reshape((-1, Y.shape[-2], 1)))[0], french_tokenizer))
+    lis = np.array([1 if pred[i] == Y[i] else 0 for i, x in X])
+    return sum(lis) / lis.shape[0]
+
+
+predict_verbose(1, X_train, y_train)
+predict_verbose(2, X_train, y_train)
+predict_verbose(0, X_train, y_train)
+
+results = []
+for i in range(X_test.shape[0]):
+    results.append(evaluate(i, X_test, y_test))
+
+print(results)
 
