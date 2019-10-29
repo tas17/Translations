@@ -138,24 +138,21 @@ def simple_model(input_shape, output_sequence_length, english_vocab_size, french
     :param french_vocab_size: Number of unique French words in the dataset
     :return: Keras model built, but not trained
     """
-    # Hyperparameters
-    learning_rate = 0.005
 
     # TODO: Build the layers
     model = Sequential()
     model.add(GRU(256, input_shape=input_shape[1:], return_sequences=True))
-    model.add(TimeDistributed(Dense(1024, activation='relu')))
+    model.add(Dense(1024, activation='relu'))
     model.add(Dropout(0.5))
-    model.add(TimeDistributed(Dense(french_vocab_size, activation='softmax')))
+    model.add(Dense(french_vocab_size, activation='softmax'))
 
     # Compile model
     model.compile(loss=sparse_categorical_crossentropy,
-                  optimizer=Adam(learning_rate),
+                  optimizer='adam',
                   metrics=['accuracy'])
     return model
 
 
-tests.test_simple_model(simple_model)
 
 # Reshaping the input to work with a basic RNN
 tmp_x = pad(preproc_english_sentences, max_french_sequence_length)
