@@ -32,8 +32,8 @@ tmp_x = pad(preproc_english_sentences, max_french_sequence_length)
 
 X_train, X_test, y_train, y_test = train_test_split(tmp_x, preproc_french_sentences)
 
-#X_train = X_train.reshape((-1, y_train.shape[-2], 1))
-#X_test = X_test.reshape((-1, y_test.shape[-2], 1))
+#1 X_train = X_train.reshape((-1, y_train.shape[-2], 1))
+#1 X_test = X_test.reshape((-1, y_test.shape[-2], 1))
 X_train = X_train.reshape((-1, y_train.shape[-2]))
 X_test = X_test.reshape((-1, y_test.shape[-2]))
 
@@ -75,19 +75,12 @@ def evaluate(k, X, Y):
     pred = text_to_sequence(logits_to_text(model.predict(X[k].reshape((-1, Y.shape[-2], 1)))[0], french_tokenizer), french_tokenizer)
     pred2 = logits_to_text(model.predict(X[k].reshape((-1, Y.shape[-2], 1)))[0], french_tokenizer)
     lis = np.array([1 if pred[i] == Y[k][i] else 0 for i, x in enumerate(pred)])
-    #[print(pred[i]) for i,x in enumerate(X)]
     return sum(lis) / lis.shape[0]
 
 
-# predict_verbose(1, X_train, y_train)
-# predict_verbose(2, X_train, y_train)
-# predict_verbose(0, X_train, y_train)
+#1 predict_verbose(1, X_train, y_train)
+#1 predict_verbose(2, X_train, y_train)
+#1 predict_verbose(0, X_train, y_train)
 
-#results = []
-#for i in range(X_test.shape[0]):
-#    results.append(evaluate(i, X_test, y_test))
-
-#results = np.array(results)
-#print(mean(results))
 
 print(model.metrics_names, model.evaluate(X_test, y_test))
