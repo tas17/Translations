@@ -32,8 +32,10 @@ tmp_x = pad(preproc_english_sentences, max_french_sequence_length)
 
 X_train, X_test, y_train, y_test = train_test_split(tmp_x, preproc_french_sentences)
 
-X_train = X_train.reshape((-1, y_train.shape[-2], 1))
-X_test = X_test.reshape((-1, y_test.shape[-2], 1))
+#X_train = X_train.reshape((-1, y_train.shape[-2], 1))
+#X_test = X_test.reshape((-1, y_test.shape[-2], 1))
+X_train = X_train.reshape((-1, y_train.shape[-2]))
+X_test = X_test.reshape((-1, y_test.shape[-2]))
 
 
 # Train the neural network
@@ -57,6 +59,7 @@ print(X_train[0].shape)
 
 
 def predict_verbose(i, X, Y):
+    # !!!!!!!!! Only works for simple model ! 
     print("Predicting i (" + str(i) + "):")
     print('Original sentence')
     print(sequence_to_text(list(X[i].reshape(X[i].shape[0])),
@@ -76,9 +79,9 @@ def evaluate(k, X, Y):
     return sum(lis) / lis.shape[0]
 
 
-predict_verbose(1, X_train, y_train)
-predict_verbose(2, X_train, y_train)
-predict_verbose(0, X_train, y_train)
+# predict_verbose(1, X_train, y_train)
+# predict_verbose(2, X_train, y_train)
+# predict_verbose(0, X_train, y_train)
 
 #results = []
 #for i in range(X_test.shape[0]):
