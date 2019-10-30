@@ -1,8 +1,8 @@
 from loader import load_data
+from helper import tokenize, pad, preprocess, sequence_to_text, logits_to_text, text_to_sequence
+from models import simple_model, simple_embed_model
 import collections
 import numpy as np
-from helper import tokenize, pad, preprocess, sequence_to_text, logits_to_text, text_to_sequence
-from models import simple_model
 from sklearn.model_selection import train_test_split
 
 
@@ -37,17 +37,19 @@ X_test = X_test.reshape((-1, y_test.shape[-2], 1))
 
 
 # Train the neural network
-simple_rnn_model = simple_model(
-    X_train.shape,
-    french_vocab_size+1)
+# model = simple_model(
+#     X_train.shape,
+#     french_vocab_size+1)
+
+model = simple_embed_model(X_train.shape, english_vocab_size+1, french_vocab_size+1)
 
 print('fitting shapes', X_train.shape, "(", X_train.shape[:1], ")", french_vocab_size, preproc_french_sentences.shape)
 
-print(simple_rnn_model.summary())
+print(model.summary())
 
-simple_rnn_model.fit(X_train, y_train, batch_size=1024, epochs=50, validation_split=0.2)
+model.fit(X_train, y_train, batch_size=1024, epochs=50, validation_split=0.2)
 
-simple_rnn_model.save("models/GRUAlone")
+model.save("models/GRUEmbedded")
 
 # Print prediction(s)
 print(X_train.shape)
@@ -60,15 +62,15 @@ def predict_verbose(i, X, Y):
     print(sequence_to_text(list(X[i].reshape(X[i].shape[0])),
                            english_tokenizer))
     print("Predicted translation ")
-    print(logits_to_text(simple_rnn_model.predict(X[i].reshape((-1, Y.shape[-2], 1)))[0], french_tokenizer))
+    print(logits_to_text(model.predict(X[i].reshape((-1, Y.shape[-2], 1)))[0], french_tokenizer))
     print('Correct Translation')
     print(sequence_to_text(list(Y[i].reshape(Y[i].shape[0])),
                            french_tokenizer))
 
 
 def evaluate(k, X, Y):
-    pred = text_to_sequence(logits_to_text(simple_rnn_model.predict(X[k].reshape((-1, Y.shape[-2], 1)))[0], french_tokenizer), french_tokenizer)
-    pred2 = logits_to_text(simple_rnn_model.predict(X[k].reshape((-1, Y.shape[-2], 1)))[0], french_tokenizer)
+    pred = text_to_sequence(logits_to_text(model.predict(X[k].reshape((-1, Y.shape[-2], 1)))[0], french_tokenizer), french_tokenizer)
+    pred2 = logits_to_text(model.predict(X[k].reshape((-1, Y.shape[-2], 1)))[0], french_tokenizer)
     lis = np.array([1 if pred[i] == Y[k][i] else 0 for i, x in enumerate(pred)])
     #[print(pred[i]) for i,x in enumerate(X)]
     return sum(lis) / lis.shape[0]
@@ -85,4 +87,4 @@ predict_verbose(0, X_train, y_train)
 #results = np.array(results)
 #print(mean(results))
 
-print(simple_rnn_model.metrics_names, simple_rnn_model.evaluate(X_test, y_test))
+print(model.metrics_names, model.evaluate(X_test, y_test))
