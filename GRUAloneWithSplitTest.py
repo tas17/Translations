@@ -1,7 +1,7 @@
 from loader import load_data
 import collections
 import numpy as np
-from helper import tokenize, pad, preprocess, sequence_to_text, logits_to_text
+from helper import tokenize, pad, preprocess, sequence_to_text, logits_to_text, text_to_sequence
 from models import simple_model
 from sklearn.model_selection import train_test_split
 
@@ -45,7 +45,7 @@ print('fitting shapes', X_train.shape, "(", X_train.shape[:1], ")", french_vocab
 
 print(simple_rnn_model.summary())
 
-simple_rnn_model.fit(X_train, y_train, batch_size=1024, epochs=30, validation_split=0.2)
+simple_rnn_model.fit(X_train, y_train, batch_size=1024, epochs=50, validation_split=0.2)
 
 simple_rnn_model.save("models/GRUAlone")
 
@@ -66,9 +66,11 @@ def predict_verbose(i, X, Y):
                            french_tokenizer))
 
 
-def evaluate(i, X, Y):
-    pred = english_tokenizer.texts_to_sequences(logits_to_text(simple_rnn_model.predict(X[i].reshape((-1, Y.shape[-2], 1)))[0], french_tokenizer))
-    lis = np.array([1 if pred[i] == Y[i] else 0 for i, x in X])
+def evaluate(k, X, Y):
+    pred = text_to_sequence(logits_to_text(simple_rnn_model.predict(X[k].reshape((-1, Y.shape[-2], 1)))[0], french_tokenizer), french_tokenizer)
+    pred2 = logits_to_text(simple_rnn_model.predict(X[k].reshape((-1, Y.shape[-2], 1)))[0], french_tokenizer)
+    lis = np.array([1 if pred[i] == Y[k][i] else 0 for i, x in enumerate(pred)])
+    #[print(pred[i]) for i,x in enumerate(X)]
     return sum(lis) / lis.shape[0]
 
 
@@ -76,9 +78,11 @@ predict_verbose(1, X_train, y_train)
 predict_verbose(2, X_train, y_train)
 predict_verbose(0, X_train, y_train)
 
-results = []
-for i in range(X_test.shape[0]):
-    results.append(evaluate(i, X_test, y_test))
+#results = []
+#for i in range(X_test.shape[0]):
+#    results.append(evaluate(i, X_test, y_test))
 
-print(results)
+#results = np.array(results)
+#print(mean(results))
 
+print(simple_rnn_model.metrics_names, simple_rnn_model.evaluate(X_test, y_test))

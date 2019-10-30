@@ -49,6 +49,12 @@ def sequence_to_text(s, tokenizer):
     return ' ' .join([index_to_words[k] for k in s]) 
 
 
+def text_to_sequence(t, tokenizer):
+    index_to_words = {word:id for word, id in tokenizer.word_index.items()}
+    index_to_words["<PAD>"] = 0
+    return [index_to_words[k] for k in t.split(' ')]
+    
+
 def logits_to_text(logits, tokenizer):
     """
     Turn logits from a neural network into text using the tokenizer
