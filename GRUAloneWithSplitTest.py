@@ -1,8 +1,9 @@
 from loader import load_data
 from helper import tokenize, pad, preprocess, sequence_to_text, logits_to_text, text_to_sequence
-from models import simple_model, simple_embed_model
+from models import simple_model, simple_embed_model, initialized_embed_model
 import collections
 import numpy as np
+import gensim
 from sklearn.model_selection import train_test_split
 
 
@@ -27,6 +28,26 @@ print("Max French sentence length:", max_french_sequence_length)
 print("English vocabulary size:", english_vocab_size)
 print("French vocabulary size:", french_vocab_size)
 
+# print(preproc_english_sentences)
+# print(english_sentences)
+word2VecModel = gensim.models.Word2Vec(sentences=[s.split(' ') for s in english_sentences], size=256, min_count=1)
+print(list(word2VecModel.wv.vocab))
+print(word2VecModel.wv.most_similar('june'))
+
+
+WV_DIM = 256
+MAX_NB_WORDS = english_vocab_size+1
+# we initialize the matrix with random numbers
+wv_matrix = (np.random.rand(english_vocab_size+1, WV_DIM) - 0.5) / 5.0
+for word, i in english_tokenizer.word_index.items():
+    if i >= MAX_NB_WORDS:
+        continue
+    embedding_vector = english_tokenizer.word_index[word]
+    # words not found in embedding index will be all-zeros.
+    if embedding_vector is not None:
+        wv_matrix[i] = embedding_vector
+
+
 # Reshaping the input to work with a basic RNN
 tmp_x = pad(preproc_english_sentences, max_french_sequence_length)
 
@@ -43,7 +64,9 @@ X_test = X_test.reshape((-1, y_test.shape[-2]))
 #     X_train.shape,
 #     french_vocab_size+1)
 
-model = simple_embed_model(X_train.shape, english_vocab_size+1, french_vocab_size+1)
+# model = simple_embed_model(X_train.shape, english_vocab_size+1, french_vocab_size+1)
+
+model = initialized_embed_model(X_train.shape, english_vocab_size+1, french_vocab_size+1, wv_matrix)
 
 print('fitting shapes', X_train.shape, "(", X_train.shape[:1], ")", french_vocab_size, preproc_french_sentences.shape)
 

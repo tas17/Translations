@@ -2,6 +2,7 @@ from keras.models import Sequential
 from keras.losses import sparse_categorical_crossentropy
 from keras.layers import GRU, Dense, Dropout
 from keras.layers.embeddings import Embedding
+from keras.initializers import Constant
 
 
 def simple_model(input_shape, final_size):
@@ -36,6 +37,22 @@ def simple_embed_model(input_shape, english_vocab_size, french_vocab_size):
 
     model = Sequential()
     model.add(Embedding(english_vocab_size, 256, input_length=input_shape[1], input_shape=input_shape[1:]))
+    model.add(GRU(256, return_sequences=True))
+    model.add(Dense(1024, activation='relu'))
+    model.add(Dropout(0.5))
+    model.add(Dense(french_vocab_size, activation='softmax'))
+
+    # Compile model
+    model.compile(loss=sparse_categorical_crossentropy,
+                  optimizer='adam',
+                  metrics=['accuracy'])
+    return model
+
+
+def initialized_embed_model(input_shape, english_vocab_size, french_vocab_size, initializing_matrix):
+    model = Sequential()
+    model.add(Embedding(english_vocab_size, 256, input_length=input_shape[1], input_shape=input_shape[1:],
+                        embeddings_initializer=Constant(initializing_matrix)))
     model.add(GRU(256, return_sequences=True))
     model.add(Dense(1024, activation='relu'))
     model.add(Dropout(0.5))
