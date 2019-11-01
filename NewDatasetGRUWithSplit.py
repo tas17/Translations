@@ -4,11 +4,31 @@ from models import simple_model, simple_embed_model, initialized_embed_model
 import collections
 import numpy as np
 import gensim
+import re
 from sklearn.model_selection import train_test_split
 
 
-english_sentences = load_data('data/small_vocab_en')
-french_sentences = load_data('data/small_vocab_fr')
+data_path = 'fra-eng/fra.txt'
+
+# Vectorize the data.
+english_sentences = []
+french_sentences = []
+# input_characters = set()
+# target_characters = set()
+with open(data_path, 'r', encoding='utf-8') as f:
+    lines = f.read().split('\n')
+
+for line in lines:
+    a = line.split('\t')
+    if len(a) >= 2:
+        input_text = a[0]
+        target_text = a[1]
+        input_text = re.sub(r"(\w)([.,])", r"\1 \2", input_text)
+        target_text = re.sub(r"(\w)([.,])", r"\1 \2", target_text)
+        # target_text = "<START> " + target_text + " <END>"
+        english_sentences.append(input_text)
+        french_sentences.append(target_text)
+
 english_words_counter = collections.Counter([word for sentence in english_sentences for word in sentence.split()])
 french_words_counter = collections.Counter([word for sentence in french_sentences for word in sentence.split()])
 
@@ -27,25 +47,6 @@ print("Max English sentence length:", max_english_sequence_length)
 print("Max French sentence length:", max_french_sequence_length)
 print("English vocabulary size:", english_vocab_size)
 print("French vocabulary size:", french_vocab_size)
-
-# print(preproc_english_sentences)
-# print(english_sentences)
-word2VecModel = gensim.models.Word2Vec(sentences=[s.split(' ') for s in english_sentences], size=256, min_count=1)
-print(list(word2VecModel.wv.vocab))
-print(word2VecModel.wv.most_similar('june'))
-
-
-WV_DIM = 256
-MAX_NB_WORDS = english_vocab_size+1
-# we initialize the matrix with random numbers
-wv_matrix = (np.random.rand(english_vocab_size+1, WV_DIM) - 0.5) / 5.0
-for word, i in english_tokenizer.word_index.items():
-    if i >= MAX_NB_WORDS:
-        continue
-    embedding_vector = english_tokenizer.word_index[word]
-    # words not found in embedding index will be all-zeros.
-    if embedding_vector is not None:
-        wv_matrix[i] = embedding_vector
 
 
 # Reshaping the input to work with a basic RNN
@@ -82,7 +83,7 @@ print(X_train[0].shape)
 
 
 def predict_verbose(i, X, Y):
-    # !!!!!!!!! Only works for simple model ! 
+    # !!!!!!!!! Only works for simple model !
     print("Predicting i (" + str(i) + "):")
     print('Original sentence')
     print(sequence_to_text(list(X[i].reshape(X[i].shape[0])),

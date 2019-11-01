@@ -35,6 +35,7 @@ def simple_embed_model(input_shape, english_vocab_size, french_vocab_size):
     :return: Keras model built, but not trained
     """
 
+    print(input_shape, input_shape[1], input_shape[1:])
     model = Sequential()
     model.add(Embedding(english_vocab_size, 256, input_length=input_shape[1], input_shape=input_shape[1:]))
     model.add(GRU(256, return_sequences=True))
