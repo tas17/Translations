@@ -81,8 +81,8 @@ def padAndMask(input_shape, english_vocab_size, french_vocab_size, initializing_
     model.add(Dense(french_vocab_size, activation='softmax'))
 
     # Compile model
-    model.compile(loss=sparse_categorical_crossentropy,
-                  optimizer=TFOptimizer(tf.train.GradientDescentOptimizer(0.1)),
+    model.compile(loss='categorical_crossentropy',
+                  optimizer='adam',
                   metrics=['accuracy'])
     return model
 
