@@ -64,7 +64,7 @@ def initialized_embed_model(input_shape, english_vocab_size, french_vocab_size, 
 
     # Compile model
     model.compile(loss=sparse_categorical_crossentropy,
-                  optimizer=TFOptimizer(tf.train.GradientDescentOptimizer(0.1)),
+                  optimizer='adam',
                   metrics=['accuracy'])
     return model
 
@@ -74,14 +74,14 @@ def padAndMask(input_shape, english_vocab_size, french_vocab_size, initializing_
     model = Sequential()
     # model.add(Masking(mask_value=0, input_shape=(None, input_shape[1])))
     model.add(Embedding(english_vocab_size, 256, input_length=input_shape[1], input_shape=input_shape[1:],
-                        embeddings_initializer=Constant(initializing_matrix), mask_zero=True))
+                        embeddings_initializer=Constant(initializing_matrix)))
     model.add(GRU(256, return_sequences=True))
     model.add(Dense(1024, activation='relu'))
     model.add(Dropout(0.5))
     model.add(Dense(french_vocab_size, activation='softmax'))
 
     # Compile model
-    model.compile(loss='categorical_crossentropy',
+    model.compile(loss=sparse_categorical_crossentropy,
                   optimizer='adam',
                   metrics=['accuracy'])
     return model

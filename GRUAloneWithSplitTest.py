@@ -64,9 +64,9 @@ X_test = X_test.reshape((-1, y_test.shape[-2]))
 #     X_train.shape,
 #     french_vocab_size+1)
 
-model = simple_embed_model(X_train.shape, english_vocab_size+1, french_vocab_size+1)
+# model = simple_embed_model(X_train.shape, english_vocab_size+1, french_vocab_size+1)
 
-# model = initialized_embed_model(X_train.shape, english_vocab_size+1, french_vocab_size+1, wv_matrix)
+model = initialized_embed_model(X_train.shape, english_vocab_size+1, french_vocab_size+1, wv_matrix)
 
 # model = padAndMask(X_train.shape, english_vocab_size+1, french_vocab_size+1)
 
