@@ -1,6 +1,6 @@
 from keras.models import Sequential
 from keras.losses import sparse_categorical_crossentropy
-from keras.layers import GRU, Dense, Dropout
+from keras.layers import GRU, Dense, Dropout, Masking
 from keras.layers.embeddings import Embedding
 from keras.initializers import Constant
 from keras.optimizers import Adam, TFOptimizer
@@ -67,3 +67,23 @@ def initialized_embed_model(input_shape, english_vocab_size, french_vocab_size, 
                   optimizer=TFOptimizer(tf.train.GradientDescentOptimizer(0.1)),
                   metrics=['accuracy'])
     return model
+
+
+def padAndMask(input_shape, english_vocab_size, french_vocab_size, initializing_matrix):
+    print(input_shape, input_shape[1], input_shape[1:])
+    model = Sequential()
+    # model.add(Masking(mask_value=0, input_shape=(None, input_shape[1])))
+    model.add(Embedding(english_vocab_size, 256, input_length=input_shape[1], input_shape=input_shape[1:],
+                        embeddings_initializer=Constant(initializing_matrix), mask_zero=True))
+    model.add(GRU(256, return_sequences=True))
+    model.add(Dense(1024, activation='relu'))
+    model.add(Dropout(0.5))
+    model.add(Dense(french_vocab_size, activation='softmax'))
+
+    # Compile model
+    model.compile(loss=sparse_categorical_crossentropy,
+                  optimizer=TFOptimizer(tf.train.GradientDescentOptimizer(0.1)),
+                  metrics=['accuracy'])
+    return model
+
+

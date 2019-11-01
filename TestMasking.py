@@ -64,11 +64,11 @@ X_test = X_test.reshape((-1, y_test.shape[-2]))
 #     X_train.shape,
 #     french_vocab_size+1)
 
-model = simple_embed_model(X_train.shape, english_vocab_size+1, french_vocab_size+1)
+# model = simple_embed_model(X_train.shape, english_vocab_size+1, french_vocab_size+1)
 
 # model = initialized_embed_model(X_train.shape, english_vocab_size+1, french_vocab_size+1, wv_matrix)
 
-# model = padAndMask(X_train.shape, english_vocab_size+1, french_vocab_size+1)
+model = padAndMask(X_train.shape, english_vocab_size+1, french_vocab_size+1, wv_matrix)
 
 print('fitting shapes', X_train.shape, "(", X_train.shape[:1], ")", french_vocab_size, preproc_french_sentences.shape)
 
@@ -76,7 +76,7 @@ print(model.summary())
 
 model.fit(X_train, y_train, batch_size=1024, epochs=50, validation_split=0.2)
 
-model.save("models/GRUEmbedded")
+model.save("models/GRUMasked")
 
 # Print prediction(s)
 print(X_train.shape)
@@ -84,7 +84,7 @@ print(X_train[0].shape)
 
 
 def predict_verbose(i, X, Y):
-    # !!!!!!!!! Only works for simple model ! 
+    # !!!!!!!!! Only works for simple model !
     print("Predicting i (" + str(i) + "):")
     print('Original sentence')
     print(sequence_to_text(list(X[i].reshape(X[i].shape[0])),
