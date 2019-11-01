@@ -3,6 +3,7 @@ from keras.losses import sparse_categorical_crossentropy
 from keras.layers import GRU, Dense, Dropout
 from keras.layers.embeddings import Embedding
 from keras.initializers import Constant
+from keras.optimizers import Adam
 
 
 def simple_model(input_shape, final_size):
@@ -45,7 +46,7 @@ def simple_embed_model(input_shape, english_vocab_size, french_vocab_size):
 
     # Compile model
     model.compile(loss=sparse_categorical_crossentropy,
-                  optimizer='adam',
+                  optimizer=Adam(0.005),
                   metrics=['accuracy'])
     return model
 
