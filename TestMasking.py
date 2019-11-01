@@ -122,7 +122,7 @@ def predict_verbose(i, X, Y):
 
 def evaluate(k, X, Y):
     pred = text_to_sequence(logits_to_text(model.predict(X[k].reshape((-1, Y.shape[-2], 1)))[0], french_tokenizer), french_tokenizer)
-    pred2 = logits_to_text(model.predict(X[k].reshape((-1, Y.shape[-2], 1)))[0], french_tokenizer)
+    pred2 = logits_to_text(model.predict(X[k].reshape((Y.shape[-2], 1)))[0], french_tokenizer)
     lis = np.array([1 if pred[i] == Y[k][i] else 0 for i, x in enumerate(pred)])
     return sum(lis) / lis.shape[0]
 
