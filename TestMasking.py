@@ -4,11 +4,35 @@ from models import simple_model, simple_embed_model, initialized_embed_model, pa
 import collections
 import numpy as np
 import gensim
+import re
 from sklearn.model_selection import train_test_split
 
 
-english_sentences = load_data('data/small_vocab_en')
-french_sentences = load_data('data/small_vocab_fr')
+# english_sentences = load_data('data/small_vocab_en')
+# french_sentences = load_data('data/small_vocab_fr')
+
+data_path = 'fra-eng/fra.txt'
+
+# Vectorize the data.
+english_sentences = []
+french_sentences = []
+# input_characters = set()
+# target_characters = set()
+with open(data_path, 'r', encoding='utf-8') as f:
+    lines = f.read().split('\n')
+
+for line in lines:
+    a = line.split('\t')
+    if len(a) >= 2:
+        input_text = a[0]
+        target_text = a[1]
+        input_text = re.sub(r"(\w)([.,])", r"\1 \2", input_text)
+        target_text = re.sub(r"(\w)([.,])", r"\1 \2", target_text)
+        # target_text = "<START> " + target_text + " <END>"
+        english_sentences.append(input_text)
+        french_sentences.append(target_text)
+
+
 english_words_counter = collections.Counter([word for sentence in english_sentences for word in sentence.split()])
 french_words_counter = collections.Counter([word for sentence in french_sentences for word in sentence.split()])
 
@@ -103,6 +127,8 @@ def evaluate(k, X, Y):
     return sum(lis) / lis.shape[0]
 
 
+for i in range(10):
+    evaluate(i, X_test, y_test)
 #1 predict_verbose(1, X_train, y_train)
 #1 predict_verbose(2, X_train, y_train)
 #1 predict_verbose(0, X_train, y_train)

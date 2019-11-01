@@ -29,7 +29,6 @@ for line in lines:
         english_sentences.append(input_text)
         french_sentences.append(target_text)
 
-english_sentences = english_sentences[:]
 english_words_counter = collections.Counter([word for sentence in english_sentences for word in sentence.split()])
 french_words_counter = collections.Counter([word for sentence in french_sentences for word in sentence.split()])
 
