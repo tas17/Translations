@@ -23,8 +23,8 @@ for line in lines:
     if len(a) >= 2:
         input_text = a[0].lower()
         target_text = a[1].lower()
-        input_text = re.sub(r"[[.,?!'-;<>#{()}]^]", r"", input_text)
-        target_text = re.sub(r"[[.,?!'-;<>#{()}]^]", r"", target_text)
+        input_text = re.sub(r"[.,?!'-;<>#{()}^]", r"", input_text)
+        target_text = re.sub(r"[.,?!'-;<>#{()}^]", r"", target_text)
         input_text = re.sub(r'"', r"", input_text)
         target_text = re.sub(r'"', r"", target_text)
         target_text = "<start> " + target_text + " <end>"
