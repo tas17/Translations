@@ -34,8 +34,6 @@ def preprocess(x, y, b=True):
     """
     preprocess_x, x_tk = tokenize(x)
     preprocess_y, y_tk = tokenize(y)
-    print(y)
-    print(preprocess_y)
 
     preprocess_x = pad(preprocess_x)
     preprocess_y = pad(preprocess_y)

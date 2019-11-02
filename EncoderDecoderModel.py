@@ -23,8 +23,8 @@ for line in lines:
     if len(a) >= 2:
         input_text = a[0].lower()
         target_text = a[1].lower()
-        input_text = re.sub(r"[.,?!'-]", r"", input_text)
-        target_text = re.sub(r"[.,?!'-]", r"", target_text)
+        input_text = re.sub(r"[[.,?!'-;<>#{()}]^]", r"", input_text)
+        target_text = re.sub(r"[[.,?!'-;<>#{()}]^]", r"", target_text)
         input_text = re.sub(r'"', r"", input_text)
         target_text = re.sub(r'"', r"", target_text)
         target_text = "<start> " + target_text + " <end>"
@@ -82,8 +82,8 @@ def generate_batch(X=X_train, y=y_train, batch_size=128):
                 # print(input_text)
                 # print(input_text.shape)
                 # print(target_text)
-                print(target_text)
-                print(target_text.split(" "))
+                # print(target_text)
+                # print(target_text.split(" "))
                 # print(target_token_index)
                 for t, word in enumerate(input_text.split(" ")):
                     # print(t, word)
