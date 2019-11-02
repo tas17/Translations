@@ -9,7 +9,7 @@ def tokenize(x):
     :param x: List of sentences/strings to be tokenized
     :return: Tuple of (tokenized x data, tokenizer used to tokenize x)
     """
-    tokenizer = Tokenizer()
+    tokenizer = Tokenizer(filters='!"#$%&()*+,-/:;=?@[\\]^_`{|}~\t\n.')
     tokenizer.fit_on_texts(x)
     return tokenizer.texts_to_sequences(x), tokenizer
 
@@ -24,21 +24,26 @@ def pad(x, length=None):
     return pad_sequences(x, maxlen=length, padding='post')
 
 
-def preprocess(x, y):
+def preprocess(x, y, b=True):
     """
     Preprocess x and y
     :param x: Feature List of sentences
     :param y: Label List of sentences
+    :param b: optional feature for not reshaping
     :return: Tuple of (Preprocessed x, Preprocessed y, x tokenizer, y tokenizer)
     """
     preprocess_x, x_tk = tokenize(x)
     preprocess_y, y_tk = tokenize(y)
+    print(y)
+    print(preprocess_y)
 
     preprocess_x = pad(preprocess_x)
     preprocess_y = pad(preprocess_y)
+    # print(preprocess_y)
 
-    # Keras's sparse_categorical_crossentropy function requires the labels to be in 3 dimensions
-    preprocess_y = preprocess_y.reshape(*preprocess_y.shape, 1)
+    if b:
+        # Keras's sparse_categorical_crossentropy function requires the labels to be in 3 dimensions
+        preprocess_y = preprocess_y.reshape(*preprocess_y.shape, 1)
 
     return preprocess_x, preprocess_y, x_tk, y_tk
 

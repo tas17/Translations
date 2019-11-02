@@ -1,6 +1,6 @@
 from loader import load_data
 from helper import tokenize, pad, preprocess, sequence_to_text, logits_to_text, text_to_sequence
-from models import simple_model, simple_embed_model, initialized_embed_model, padAndMask
+from models import simple_model, simple_embed_model, initialized_embed_model, padAndMask, encoder_decoder
 import collections
 import numpy as np
 import gensim
@@ -66,9 +66,11 @@ X_test = X_test.reshape((-1, y_test.shape[-2]))
 
 # model = simple_embed_model(X_train.shape, english_vocab_size+1, french_vocab_size+1)
 
-model = initialized_embed_model(X_train.shape, english_vocab_size+1, french_vocab_size+1, wv_matrix)
+# model = initialized_embed_model(X_train.shape, english_vocab_size+1, french_vocab_size+1, wv_matrix)
 
 # model = padAndMask(X_train.shape, english_vocab_size+1, french_vocab_size+1)
+
+model = encoder_decoder(X_train.shape, 150, french_vocab_size+1)
 
 print('fitting shapes', X_train.shape, "(", X_train.shape[:1], ")", french_vocab_size, preproc_french_sentences.shape)
 
