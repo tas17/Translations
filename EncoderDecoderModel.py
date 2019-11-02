@@ -88,17 +88,27 @@ def generate_batch(X=X_train, y=y_train, batch_size=128):
                 for t, word in enumerate(input_text.split(" ")):
                     # print(t, word)
                     # encoder_input_data[i, t] = word  # encoder input seq
-                    encoder_input_data[i, t] = input_token_index[word]  # encoder input seq
+                    try:
+                        encoder_input_data[i, t] = input_token_index[word]  # encoder input seq
+                    except:
+                        pass
+
                 for t, word in enumerate(target_text.split(" ")):
                     if t < len(input_text)-1:
                         # decoder_input_data[i, t] = word  # decoder input seq
-                        decoder_input_data[i, t] = target_token_index[word]  # decoder input seq
+                        try:
+                            decoder_input_data[i, t] = target_token_index[word]  # decoder input seq
+                        except:
+                            pass
                     if t > 0:
                         # decoder target sequence (one hot encoded)
                         # does not include the START_ token
                         # Offset by one timestep
                         # decoder_target_data[i, t - 1, word] = 1.
-                        decoder_target_data[i, t - 1, target_token_index[word]] = 1.
+                        try:
+                            decoder_target_data[i, t - 1, target_token_index[word]] = 1.
+                        except:
+                            pass
             yield([encoder_input_data, decoder_input_data], decoder_target_data)
 
 
