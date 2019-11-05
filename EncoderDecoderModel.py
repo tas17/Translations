@@ -1,7 +1,7 @@
 from loader import load_data
 from helper import tokenize, pad, preprocess, sequence_to_text, logits_to_text, text_to_sequence
 from models import encoder_decoderRMSProp, encoder_decoderAdam, encoder_decoderAdamBiggerEmbed, \
-    encoder_decoderAdamOneEmbed
+    encoder_decoderAdamOneEmbed, encoder_decoderAdamFast
 import collections
 import numpy as np
 import gensim
@@ -98,12 +98,24 @@ def generate_batch(X=X_train, y=y_train, batch_size=128):
             yield([encoder_input_data, decoder_input_data], decoder_target_data)
 
 
-# HERE models
 # model, encoder_model, decoder_model = encoder_decoder(english_vocab_size, french_vocab_size)
-model, encoder_model, decoder_model = encoder_decoderRMSProp(english_vocab_size, french_vocab_size)
-# model, encoder_model, decoder_model = encoder_decoderAdam(english_vocab_size, french_vocab_size)
-# model, encoder_model, decoder_model = encoder_decoderAdamBiggerEmbed(english_vocab_size, french_vocab_size)
-# model, encoder_model, decoder_model = encoder_decoderAdamOneEmbed(english_vocab_size, french_vocab_size)
+# HERE models
+mode = 0
+if mode == 0:
+    model, encoder_model, decoder_model = encoder_decoderRMSProp(english_vocab_size, french_vocab_size)
+else:
+    if mode == 1:
+        model, encoder_model, decoder_model = encoder_decoderAdam(english_vocab_size, french_vocab_size)
+    else:
+        if mode == 2:
+            model, encoder_model, decoder_model = encoder_decoderAdamBiggerEmbed(english_vocab_size, french_vocab_size)
+        else:
+            if mode == 3:
+                model, encoder_model, decoder_model = encoder_decoderAdamOneEmbed(english_vocab_size, french_vocab_size)
+            else:
+                if mode == 4:
+                    model, encoder_model, decoder_model = encoder_decoderAdamFast(english_vocab_size, french_vocab_size)
+
 
 print(model.summary())
 train_samples = len(X_train)
@@ -111,17 +123,17 @@ val_samples = len(X_test)
 batch_size = 128
 epochs = 50
 
-# model.fit_generator(generator=generate_batch(X_train, y_train, batch_size=batch_size),
-#                     steps_per_epoch=train_samples/batch_size,
-#                     epochs=epochs,
-#                     validation_data=generate_batch(X_test, y_test, batch_size=batch_size),
-#                     validation_steps=val_samples/batch_size)
+model.fit_generator(generator=generate_batch(X_train, y_train, batch_size=batch_size),
+                    steps_per_epoch=train_samples/batch_size,
+                    epochs=epochs,
+                    validation_data=generate_batch(X_test, y_test, batch_size=batch_size),
+                    validation_steps=val_samples/batch_size)
 
-# model.fit(X_train, y_train, batch_size=batch_size, epochs=epochs, validation_split=0.2)
+model.fit(X_train, y_train, batch_size=batch_size, epochs=epochs, validation_split=0.2)
 
-# model.save("models/EncoderDecoderModel")
-# model.save_weights('models/EncoderDecoder_weights.h5')
-model.load_weights('models/EncoderDecoder_weights.h5')
+model.save("models/EncoderDecoderModel"+str(mode))
+model.save_weights('models/EncoderDecoder_weights'++str(mode)+'.h5')
+# model.load_weights('models/EncoderDecoder_weights.h5')
 
 
 def decode_sequence(input_seq):
