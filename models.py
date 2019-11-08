@@ -5,6 +5,7 @@ from keras.layers.embeddings import Embedding
 from keras.initializers import Constant
 from keras.optimizers import Adam, TFOptimizer
 from keras import Model
+import keras.backend as K
 import tensorflow as tf
 
 
@@ -201,6 +202,11 @@ def encoder_decoderAdam(english_vocab_size, french_vocab_size):
     return model, encoder_model, 0
 
 
+def categorical_accuracy_per_sequence(y_true, y_pred):
+    return K.mean(K.min(K.equal(K.argmax(y_true, axis=-1),
+                  K.argmax(y_pred, axis=-1)), axis=-1))
+
+
 def encoder_decoderAdamBiggerLSTMCapacity(english_vocab_size, french_vocab_size):
     # Encoder
     encoder_inputs = Input(shape=(None,))
@@ -231,7 +237,7 @@ def encoder_decoderAdamBiggerLSTMCapacity(english_vocab_size, french_vocab_size)
     model = Model([encoder_inputs, decoder_inputs], decoder_outputs)
 
     # Compile the model
-    model.compile(optimizer='adam', loss='categorical_crossentropy', metrics=['acc'])
+    model.compile(optimizer='adam', loss='categorical_crossentropy', metrics=['acc', categorical_accuracy_per_sequence])
 
     # Encode the input sequence to get the "thought vectors"
     encoder_model = Model(encoder_inputs, encoder_states)
