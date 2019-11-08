@@ -100,7 +100,7 @@ def generate_batch(X=X_train, y=y_train, batch_size=128):
 
 # model, encoder_model, decoder_model = encoder_decoder(english_vocab_size, french_vocab_size)
 # HERE models
-mode = 1
+mode = 3
 if mode == 0:
     model, encoder_model, decoder_model = encoder_decoderRMSProp(english_vocab_size, french_vocab_size)
 else:
