@@ -9,30 +9,94 @@ import re
 from sklearn.model_selection import train_test_split
 
 
-data_path = 'fra-eng/fra.txt'
-
-# Vectorize the data.
 english_sentences = []
 french_sentences = []
-# input_characters = set()
-# target_characters = set()
-with open(data_path, 'r', encoding='utf-8') as f:
-    lines = f.read().split('\n')
 
+# data_path = 'fra-eng/fra.txt'
+# with open(data_path, 'r', encoding='utf-8') as f:
+#     lines = f.read().split('\n')
+#
+# for line in lines:
+#     a = line.split('\t')
+#     if len(a) >= 2:
+#         input_text = a[0].lower()
+#         target_text = a[1].lower()
+#         input_text = re.sub(r"[.,?!'-;<>#{()}^]", r"", input_text)
+#         target_text = re.sub(r"[.,?!'-;<>#{()}^]", r"", target_text)
+#         input_text = re.sub(r'"', r"", input_text)
+#         target_text = re.sub(r'"', r"", target_text)
+#         target_text = "<start> " + target_text + " <end>"
+#         input_text = re.sub(" +", r" ", input_text)
+#         target_text = re.sub(" +", r" ", target_text)
+#         english_sentences.append(input_text)
+#         french_sentences.append(target_text)
+
+f1 = 'training/news-commentary-v9.fr-en.fr'
+e1 = 'training/news-commentary-v9.fr-en.en'
+f2 = 'un/undoc.2000.es-en.fr'
+e2 = 'un/undoc.2000.es-en.en'
+f3 = 'europarl-v7.fr-en.fr'
+e3 = 'europarl-v7.fr-en.en'
+
+with open(e1, 'r', encoding='utf-8') as f:
+    lines = f.read().split('\n')
 for line in lines:
-    a = line.split('\t')
-    if len(a) >= 2:
-        input_text = a[0].lower()
-        target_text = a[1].lower()
-        input_text = re.sub(r"[.,?!'-;<>#{()}^]", r"", input_text)
-        target_text = re.sub(r"[.,?!'-;<>#{()}^]", r"", target_text)
-        input_text = re.sub(r'"', r"", input_text)
-        target_text = re.sub(r'"', r"", target_text)
-        target_text = "<start> " + target_text + " <end>"
-        input_text = re.sub(" +", r" ", input_text)
-        target_text = re.sub(" +", r" ", target_text)
-        english_sentences.append(input_text)
-        french_sentences.append(target_text)
+    input_text = line
+    input_text = re.sub(r"[.,?!'-;<>#{()}^]", r"", input_text)
+    input_text = re.sub(r'"', r"", input_text)
+    input_text = re.sub(" +", r" ", input_text)
+    english_sentences.append(input_text)
+
+with open(e2, 'r', encoding='utf-8') as f:
+    lines = f.read().split('\n')
+for line in lines:
+    input_text = line
+    input_text = re.sub(r"[.,?!'-;<>#{()}^]", r"", input_text)
+    input_text = re.sub(r'"', r"", input_text)
+    input_text = re.sub(" +", r" ", input_text)
+    english_sentences.append(input_text)
+
+with open(e3, 'r', encoding='utf-8') as f:
+    lines = f.read().split('\n')
+for line in lines:
+    input_text = line
+    input_text = re.sub(r"[.,?!'-;<>#{()}^]", r"", input_text)
+    input_text = re.sub(r'"', r"", input_text)
+    input_text = re.sub(" +", r" ", input_text)
+    english_sentences.append(input_text)
+
+with open(f1, 'r', encoding='utf-8') as f:
+    lines = f.read().split('\n')
+for line in lines:
+    target_text = line
+    target_text = re.sub(r"[.,?!'-;<>#{()}^]", r"", target_text)
+    target_text = re.sub(r'"', r"", target_text)
+    target_text = "<start> " + target_text + " <end>"
+    target_text = re.sub(" +", r" ", target_text)
+    french_sentences.append(target_text)
+
+with open(f2, 'r', encoding='utf-8') as f:
+    lines = f.read().split('\n')
+for line in lines:
+    target_text = line
+    target_text = re.sub(r"[.,?!'-;<>#{()}^]", r"", target_text)
+    target_text = re.sub(r'"', r"", target_text)
+    target_text = "<start> " + target_text + " <end>"
+    target_text = re.sub(" +", r" ", target_text)
+    french_sentences.append(target_text)
+
+with open(f3, 'r', encoding='utf-8') as f:
+    lines = f.read().split('\n')
+for line in lines:
+    target_text = line
+    target_text = re.sub(r"[.,?!'-;<>#{()}^]", r"", target_text)
+    target_text = re.sub(r'"', r"", target_text)
+    target_text = "<start> " + target_text + " <end>"
+    target_text = re.sub(" +", r" ", target_text)
+    french_sentences.append(target_text)
+
+# Need to filter : keep only phrases where you know all words (keep the 30 000 most used words)
+
 
 english_words_counter = collections.Counter([word for sentence in english_sentences for word in sentence.split(" ")])
 french_words_counter = collections.Counter([word for sentence in french_sentences for word in sentence.split(" ")])
