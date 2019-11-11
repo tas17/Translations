@@ -9,6 +9,10 @@ import re
 from sklearn.model_selection import train_test_split
 
 
+MAX_NUMBER_WORD = 30
+max_english_sequence_length = MAX_NUMBER_WORD
+max_french_sequence_length = MAX_NUMBER_WORD
+
 def hasNumbers(inputString):
     return bool(re.search(r'\d', inputString))
 
@@ -44,7 +48,6 @@ e3 = 'europarl-v7.fr-en.en'
 
 
 def loadInputAndTarget(sI, sO):
-    MAX_NUMBER_WORD = 30
     b = True
     with open(sI, 'r', encoding='utf-8') as fI:
         with open(sO, 'r', encoding='utf-8') as fO:
@@ -87,8 +90,10 @@ french_words_counter = collections.Counter([word for sentence in french_sentence
 
 # print(english_words_counter.most_common(30000))
 retained_english_words = [x[0] for x in english_words_counter.most_common(30000)]
+english_vocab_size = 30000
 # print(french_words_counter.most_common(30000))
 retained_french_words = [x[0] for x in french_words_counter.most_common(30000)]
+french_vocab_size = 30000
 # print(retained_english_words)
 
 print("retaining", len(retained_english_words), "english words")
@@ -122,17 +127,17 @@ print(len(french_sentences_unfiltered))
 print(len(english_sentences))
 print(len(french_sentences))
 
-# preproc_english_sentences, preproc_french_sentences, english_tokenizer, french_tokenizer = \
-#     preprocess(english_sentences, french_sentences, False)
-#
+preproc_english_sentences, preproc_french_sentences, english_tokenizer, french_tokenizer = \
+    preprocess(english_sentences, french_sentences, False)
+
 # max_english_sequence_length = preproc_english_sentences.shape[1]
 # max_french_sequence_length = preproc_french_sentences.shape[1]
 # english_vocab_size = len(english_tokenizer.word_index)
 # french_vocab_size = len(french_tokenizer.word_index) + 1  # 0 padding
 #
-# input_token_index = {word: id for word, id in english_tokenizer.word_index.items()}
-# target_token_index = {word: id for word, id in french_tokenizer.word_index.items()}
-# reverse_target_char_index = {id: word for word, id in french_tokenizer.word_index.items()}
+input_token_index = {word: id for word, id in english_tokenizer.word_index.items()}
+target_token_index = {word: id for word, id in french_tokenizer.word_index.items()}
+reverse_target_char_index = {id: word for word, id in french_tokenizer.word_index.items()}
 # print('Shape of preproc_english_sentences', preproc_english_sentences.shape)
 # print('Shape of preproc_french_sentences', preproc_french_sentences.shape)
 #
@@ -214,8 +219,8 @@ model.fit_generator(generator=generate_batch(X_train, y_train, batch_size=batch_
 
 # model.fit(X_train, y_train, batch_size=batch_size, epochs=epochs, validation_split=0.2)
 
-model.save("models/EncoderDecoderModel"+str(mode))
-model.save_weights('models/EncoderDecoder_weights'+str(mode)+'.h5')
+model.save("models/NDS_EncoderDecoderModel"+str(mode))
+model.save_weights('models/NDS_EncoderDecoder_weights'+str(mode)+'.h5')
 # model.load_weights('models/EncoderDecoder_weights.h5')
 
 
