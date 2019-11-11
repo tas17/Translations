@@ -81,18 +81,21 @@ loadInputAndTarget(e3, f3)
 
 english_words_counter = collections.Counter([word for sentence in english_sentences for word in sentence.split(" ")])
 french_words_counter = collections.Counter([word for sentence in french_sentences for word in sentence.split(" ")])
-print(english_words_counter)
-print(french_words_counter)
+# print(english_words_counter)
+# print(french_words_counter)
 # print(french_sentences[0])
 # print([word for word in french_sentences[0].split(" ")])
 
-# preproc_english_sentences, preproc_french_sentences, english_tokenizer, french_tokenizer = \
-#     preprocess(english_sentences, french_sentences, False)
+print(english_words_counter.most_common(30000))
+print(french_words_counter.most_common(30000))
+
+preproc_english_sentences, preproc_french_sentences, english_tokenizer, french_tokenizer = \
+    preprocess(english_sentences, french_sentences, False)
 #
 # max_english_sequence_length = preproc_english_sentences.shape[1]
 # max_french_sequence_length = preproc_french_sentences.shape[1]
-# english_vocab_size = len(english_tokenizer.word_index)
-# french_vocab_size = len(french_tokenizer.word_index) + 1  # 0 padding
+english_vocab_size = len(english_tokenizer.word_index)
+french_vocab_size = len(french_tokenizer.word_index) + 1  # 0 padding
 #
 # input_token_index = {word: id for word, id in english_tokenizer.word_index.items()}
 # target_token_index = {word: id for word, id in french_tokenizer.word_index.items()}
