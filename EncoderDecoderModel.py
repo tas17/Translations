@@ -98,17 +98,19 @@ for i, sentenceEngl in enumerate(english_sentences_unfiltered):
     sentenceFr = french_sentences_unfiltered[i]
     for wordEngl in sentenceEngl.split(" "):
         if wordEngl not in retained_english_words:
-            print("English", wordEngl, "not in dic")
+            # print("English", wordEngl, "not in dic")
             # print(retained_english_words)
             break
     for wordFr in sentenceFr.split(" "):
         if (not wordFr == '<start>') and (not wordFr == '<end>') and wordFr not in retained_french_words:
-            print("French", wordFr, "not in dic")
+            # print("French", wordFr, "not in dic")
             # print(retained_french_words)
             break
     english_sentences.append(sentenceEngl)
     french_sentences.append(sentenceFr)
 
+print(len(english_sentences))
+print(len(french_sentences))
 
 # preproc_english_sentences, preproc_french_sentences, english_tokenizer, french_tokenizer = \
 #     preprocess(english_sentences, french_sentences, False)
