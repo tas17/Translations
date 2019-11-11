@@ -86,9 +86,9 @@ english_words_counter = collections.Counter([word for sentence in english_senten
 french_words_counter = collections.Counter([word for sentence in french_sentences_unfiltered for word in sentence.split(" ")])
 
 # print(english_words_counter.most_common(30000))
-retained_english_words = map(english_words_counter.most_common(30000), lambda x: x[0])
+retained_english_words = map(lambda x: x[0], english_words_counter.most_common(30000))
 # print(french_words_counter.most_common(30000))
-retained_french_words = map(french_words_counter.most_common(30000), lambda x: x[0])
+retained_french_words = map(lambda x: x[0], french_words_counter.most_common(30000))
 print(retained_english_words)
 
 # Need to filter : keep only phrases where you know all words (keep the 30 000 most used words)
