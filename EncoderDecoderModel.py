@@ -86,9 +86,9 @@ english_words_counter = collections.Counter([word for sentence in english_senten
 french_words_counter = collections.Counter([word for sentence in french_sentences_unfiltered for word in sentence.split(" ")])
 
 # print(english_words_counter.most_common(30000))
-retained_english_words = [x[0] for x in english_words_counter.most_common(1000)]
+retained_english_words = [x[0] for x in english_words_counter.most_common(30000)]
 # print(french_words_counter.most_common(30000))
-retained_french_words = [x[0] for x in french_words_counter.most_common(1000)]
+retained_french_words = [x[0] for x in french_words_counter.most_common(30000)]
 # print(retained_english_words)
 
 print("retaining", len(retained_english_words), "english words")
@@ -98,19 +98,24 @@ print("retaining", len(retained_french_words), "french words")
 english_sentences = []
 french_sentences = []
 for i, sentenceEngl in enumerate(english_sentences_unfiltered):
+    keep = True
     sentenceFr = french_sentences_unfiltered[i]
     for wordEngl in sentenceEngl.split(" "):
         if wordEngl not in retained_english_words:
             # print("English", wordEngl, "not in dic")
             # print(retained_english_words)
+            keep = False
             break
-    for wordFr in sentenceFr.split(" "):
-        if (not wordFr == '<start>') and (not wordFr == '<end>') and wordFr not in retained_french_words:
-            # print("French", wordFr, "not in dic")
-            # print(retained_french_words)
-            break
-    english_sentences.append(sentenceEngl)
-    french_sentences.append(sentenceFr)
+    if keep:
+        for wordFr in sentenceFr.split(" "):
+            if (not wordFr == '<start>') and (not wordFr == '<end>') and wordFr not in retained_french_words:
+                # print("French", wordFr, "not in dic")
+                # print(retained_french_words)
+                keep = False
+                break
+    if keep:
+        english_sentences.append(sentenceEngl)
+        french_sentences.append(sentenceFr)
 
 print(len(english_sentences_unfiltered))
 print(len(french_sentences_unfiltered))
