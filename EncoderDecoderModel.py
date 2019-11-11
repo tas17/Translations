@@ -33,11 +33,12 @@ french_sentences = []
 
 f1 = 'training/news-commentary-v9.fr-en.fr'
 e1 = 'training/news-commentary-v9.fr-en.en'
-f2 = 'un/undoc.2000.es-en.fr'
-e2 = 'un/undoc.2000.es-en.en'
+f2 = 'un/undoc.2000.fr-en.fr'
+e2 = 'un/undoc.2000.fr-en.en'
 f3 = 'europarl-v7.fr-en.fr'
 e3 = 'europarl-v7.fr-en.en'
 
+b = True
 with open(e1, 'r', encoding='utf-8') as f:
     lines = f.read().split('\n')
 for line in lines:
@@ -46,7 +47,12 @@ for line in lines:
     input_text = re.sub(r'"', r"", input_text)
     input_text = re.sub(" +", r" ", input_text)
     english_sentences.append(input_text)
+    if b:
+        b = False
+        print('First line of text 1')
+        print(input_text)
 
+b = True
 with open(e2, 'r', encoding='utf-8') as f:
     lines = f.read().split('\n')
 for line in lines:
@@ -55,7 +61,12 @@ for line in lines:
     input_text = re.sub(r'"', r"", input_text)
     input_text = re.sub(" +", r" ", input_text)
     english_sentences.append(input_text)
+    if b:
+        b = False
+        print('First line of text 2')
+        print(input_text)
 
+b = True
 with open(e3, 'r', encoding='utf-8') as f:
     lines = f.read().split('\n')
 for line in lines:
@@ -64,7 +75,12 @@ for line in lines:
     input_text = re.sub(r'"', r"", input_text)
     input_text = re.sub(" +", r" ", input_text)
     english_sentences.append(input_text)
+    if b:
+        b = False
+        print('First line of text 3')
+        print(input_text)
 
+b = True
 with open(f1, 'r', encoding='utf-8') as f:
     lines = f.read().split('\n')
 for line in lines:
@@ -74,7 +90,12 @@ for line in lines:
     target_text = "<start> " + target_text + " <end>"
     target_text = re.sub(" +", r" ", target_text)
     french_sentences.append(target_text)
+    if b:
+        b = False
+        print('First line of text 1')
+        print(target_text)
 
+b = True
 with open(f2, 'r', encoding='utf-8') as f:
     lines = f.read().split('\n')
 for line in lines:
@@ -84,7 +105,12 @@ for line in lines:
     target_text = "<start> " + target_text + " <end>"
     target_text = re.sub(" +", r" ", target_text)
     french_sentences.append(target_text)
+    if b:
+        b = False
+        print('First line of text 2')
+        print(target_text)
 
+b = True
 with open(f3, 'r', encoding='utf-8') as f:
     lines = f.read().split('\n')
 for line in lines:
@@ -94,6 +120,10 @@ for line in lines:
     target_text = "<start> " + target_text + " <end>"
     target_text = re.sub(" +", r" ", target_text)
     french_sentences.append(target_text)
+    if b:
+        b = False
+        print('First line of text 3')
+        print(target_text)
 
 # Need to filter : keep only phrases where you know all words (keep the 30 000 most used words)
 
