@@ -42,6 +42,8 @@ b = True
 with open(e1, 'r', encoding='utf-8') as f:
     lines = f.read().split('\n')
 for line in lines:
+    if b:
+        print(line)
     input_text = line
     input_text = re.sub(r"[.,?!'-;<>#{()}^]", r"", input_text)
     input_text = re.sub(r'"', r"", input_text)
@@ -56,6 +58,8 @@ b = True
 with open(e2, 'r', encoding='utf-8') as f:
     lines = f.read().split('\n')
 for line in lines:
+    if b:
+        print(line)
     input_text = line
     input_text = re.sub(r"[.,?!'-;<>#{()}^]", r"", input_text)
     input_text = re.sub(r'"', r"", input_text)
@@ -70,6 +74,8 @@ b = True
 with open(e3, 'r', encoding='utf-8') as f:
     lines = f.read().split('\n')
 for line in lines:
+    if b:
+        print(line)
     input_text = line
     input_text = re.sub(r"[.,?!'-;<>#{()}^]", r"", input_text)
     input_text = re.sub(r'"', r"", input_text)
@@ -84,6 +90,8 @@ b = True
 with open(f1, 'r', encoding='utf-8') as f:
     lines = f.read().split('\n')
 for line in lines:
+    if b:
+        print(line)
     target_text = line
     target_text = re.sub(r"[.,?!'-;<>#{()}^]", r"", target_text)
     target_text = re.sub(r'"', r"", target_text)
@@ -99,6 +107,8 @@ b = True
 with open(f2, 'r', encoding='utf-8') as f:
     lines = f.read().split('\n')
 for line in lines:
+    if b:
+        print(line)
     target_text = line
     target_text = re.sub(r"[.,?!'-;<>#{()}^]", r"", target_text)
     target_text = re.sub(r'"', r"", target_text)
@@ -114,6 +124,8 @@ b = True
 with open(f3, 'r', encoding='utf-8') as f:
     lines = f.read().split('\n')
 for line in lines:
+    if b:
+        print(line)
     target_text = line
     target_text = re.sub(r"[.,?!'-;<>#{()}^]", r"", target_text)
     target_text = re.sub(r'"', r"", target_text)
