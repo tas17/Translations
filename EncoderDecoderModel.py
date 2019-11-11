@@ -13,8 +13,8 @@ def hasNumbers(inputString):
     return bool(re.search(r'\d', inputString))
 
 
-english_sentences = []
-french_sentences = []
+english_sentences_unfiltered = []
+french_sentences_unfiltered = []
 
 # data_path = 'fra-eng/fra.txt'
 # with open(data_path, 'r', encoding='utf-8') as f:
@@ -44,6 +44,7 @@ e3 = 'europarl-v7.fr-en.en'
 
 
 def loadInputAndTarget(sI, sO):
+    MAX_NUMBER_WORD = 30
     b = True
     with open(sI, 'r', encoding='utf-8') as fI:
         with open(sO, 'r', encoding='utf-8') as fO:
@@ -57,18 +58,20 @@ def loadInputAndTarget(sI, sO):
                 if b:
                     print(input_text)
                     print(target_text)
-                if (not hasNumbers(input_text)) and (not hasNumbers(target_text)):
+                if (not hasNumbers(input_text)) and (not hasNumbers(target_text)
+                                                     and len(input_text.split(" ")) < MAX_NUMBER_WORD
+                                                     and len(target_text.split(" ")) < MAX_NUMBER_WORD):
                     input_text = re.sub(r"[.,?!-;<>#{()}^]", r"", input_text)
                     input_text = re.sub(r"'", r" ", input_text)
                     input_text = re.sub(r'"', r"", input_text)
                     input_text = re.sub(" +", r" ", input_text)
-                    english_sentences.append(input_text.lower())
+                    english_sentences_unfiltered.append(input_text.lower())
                     target_text = re.sub(r"[.,?!-;<>#{()}^]", r"", target_text)
                     target_text = re.sub(r"'", r" ", target_text)
                     target_text = re.sub(r'"', r"", target_text)
                     target_text = "<start> " + target_text + " <end>"
                     target_text = re.sub(" +", r" ", target_text)
-                    french_sentences.append(target_text.lower())
+                    french_sentences_unfiltered.append(target_text.lower())
                     if b:
                         print(input_text)
                         print(target_text)
@@ -78,26 +81,22 @@ def loadInputAndTarget(sI, sO):
 # loadInputAndTarget(e1, f1)  # 183785 vs 183757 !!!
 loadInputAndTarget(e2, f2)
 loadInputAndTarget(e3, f3)
+
+english_words_counter = collections.Counter([word for sentence in english_sentences_unfiltered for word in sentence.split(" ")])
+french_words_counter = collections.Counter([word for sentence in french_sentences_unfiltered for word in sentence.split(" ")])
+
+# print(english_words_counter.most_common(30000))
+# print(french_words_counter.most_common(30000))
+
 # Need to filter : keep only phrases where you know all words (keep the 30 000 most used words)
 
-
-english_words_counter = collections.Counter([word for sentence in english_sentences for word in sentence.split(" ")])
-french_words_counter = collections.Counter([word for sentence in french_sentences for word in sentence.split(" ")])
-# print(english_words_counter)
-# print(french_words_counter)
-# print(french_sentences[0])
-# print([word for word in french_sentences[0].split(" ")])
-
-print(english_words_counter.most_common(30000))
-print(french_words_counter.most_common(30000))
-
-preproc_english_sentences, preproc_french_sentences, english_tokenizer, french_tokenizer = \
-    preprocess(english_sentences, french_sentences, False)
+# preproc_english_sentences, preproc_french_sentences, english_tokenizer, french_tokenizer = \
+#     preprocess(english_sentences, french_sentences, False)
 #
 # max_english_sequence_length = preproc_english_sentences.shape[1]
 # max_french_sequence_length = preproc_french_sentences.shape[1]
-english_vocab_size = len(english_tokenizer.word_index)
-french_vocab_size = len(french_tokenizer.word_index) + 1  # 0 padding
+# english_vocab_size = len(english_tokenizer.word_index)
+# french_vocab_size = len(french_tokenizer.word_index) + 1  # 0 padding
 #
 # input_token_index = {word: id for word, id in english_tokenizer.word_index.items()}
 # target_token_index = {word: id for word, id in french_tokenizer.word_index.items()}
