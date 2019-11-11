@@ -99,10 +99,12 @@ for i, sentenceEngl in enumerate(english_sentences_unfiltered):
     for wordEngl in sentenceEngl.split(" "):
         if wordEngl not in retained_english_words:
             print("English", wordEngl, "not in dic")
+            print(retained_english_words)
             break
     for wordFr in sentenceFr.split(" "):
-        if wordFr not in retained_french_words:
+        if (not wordFr == '<start>') and (not wordFr == '<end>') and wordFr not in retained_french_words:
             print("French", wordFr, "not in dic")
+            print(retained_french_words)
             break
     english_sentences.append(sentenceEngl)
     french_sentences.append(sentenceFr)
