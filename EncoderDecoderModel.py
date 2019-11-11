@@ -9,6 +9,10 @@ import re
 from sklearn.model_selection import train_test_split
 
 
+def hasNumbers(inputString):
+    return bool(re.search(r'\d', inputString))
+
+
 english_sentences = []
 french_sentences = []
 
@@ -38,113 +42,30 @@ e2 = 'un/undoc.2000.fr-en.en'
 f3 = 'europarl-v7.fr-en.fr'
 e3 = 'europarl-v7.fr-en.en'
 
-b = True
-with open(e1, 'r', encoding='utf-8') as f:
-    lines = f.read().split('\n')
-for line in lines:
-    if b:
-        print(line)
-    input_text = line
-    if b:
-        print(input_text)
-    input_text = re.sub(r"[.,?!'-;<>#{()}^]", r"", input_text)
-    if b:
-        print(input_text)
-    input_text = re.sub(r'"', r"", input_text)
-    if b:
-        print(input_text)
-    input_text = re.sub(" +", r" ", input_text)
-    if b:
-        print(input_text)
-    english_sentences.append(input_text)
-    if b:
-        b = False
-        print('First line of text 1')
-        print(input_text)
 
-b = True
-with open(e2, 'r', encoding='utf-8') as f:
-    lines = f.read().split('\n')
-for line in lines:
-    if b:
-        print(line)
-    input_text = line
-    input_text = re.sub(r"[.,?!'-;<>#{()}^]", r"", input_text)
-    input_text = re.sub(r'"', r"", input_text)
-    input_text = re.sub(" +", r" ", input_text)
-    english_sentences.append(input_text)
-    if b:
-        b = False
-        print('First line of text 2')
-        print(input_text)
+def loadInputAndTarget(sI, sO):
+    with open(sI, 'r', encoding='utf-8') as fI:
+        with open(sO, 'r', encoding='utf-8') as fO:
+            linesI = fI.read().split('\n')
+            linesO = fO.read().split('\n')
+            for i, line in enumerate(linesI):
+                input_text = line
+                target_text = linesO[i]
+                if (not hasNumbers(input_text)) and (not hasNumbers(target_text)):
+                    input_text = re.sub(r"[.,?!'-;<>#{()}^]", r"", input_text)
+                    input_text = re.sub(r'"', r"", input_text)
+                    input_text = re.sub(" +", r" ", input_text)
+                    english_sentences.append(input_text)
+                    target_text = re.sub(r"[.,?!'-;<>#{()}^]", r"", target_text)
+                    target_text = re.sub(r'"', r"", target_text)
+                    target_text = "<start> " + target_text + " <end>"
+                    target_text = re.sub(" +", r" ", target_text)
+                    french_sentences.append(target_text)
 
-b = True
-with open(e3, 'r', encoding='utf-8') as f:
-    lines = f.read().split('\n')
-for line in lines:
-    if b:
-        print(line)
-    input_text = line
-    input_text = re.sub(r"[.,?!'-;<>#{()}^]", r"", input_text)
-    input_text = re.sub(r'"', r"", input_text)
-    input_text = re.sub(" +", r" ", input_text)
-    english_sentences.append(input_text)
-    if b:
-        b = False
-        print('First line of text 3')
-        print(input_text)
 
-b = True
-with open(f1, 'r', encoding='utf-8') as f:
-    lines = f.read().split('\n')
-for line in lines:
-    if b:
-        print(line)
-    target_text = line
-    target_text = re.sub(r"[.,?!'-;<>#{()}^]", r"", target_text)
-    target_text = re.sub(r'"', r"", target_text)
-    target_text = "<start> " + target_text + " <end>"
-    target_text = re.sub(" +", r" ", target_text)
-    french_sentences.append(target_text)
-    if b:
-        b = False
-        print('First line of text 1')
-        print(target_text)
-
-b = True
-with open(f2, 'r', encoding='utf-8') as f:
-    lines = f.read().split('\n')
-for line in lines:
-    if b:
-        print(line)
-    target_text = line
-    target_text = re.sub(r"[.,?!'-;<>#{()}^]", r"", target_text)
-    target_text = re.sub(r'"', r"", target_text)
-    target_text = "<start> " + target_text + " <end>"
-    target_text = re.sub(" +", r" ", target_text)
-    french_sentences.append(target_text)
-    if b:
-        b = False
-        print('First line of text 2')
-        print(target_text)
-
-b = True
-with open(f3, 'r', encoding='utf-8') as f:
-    lines = f.read().split('\n')
-for line in lines:
-    if b:
-        print(line)
-    target_text = line
-    target_text = re.sub(r"[.,?!'-;<>#{()}^]", r"", target_text)
-    target_text = re.sub(r'"', r"", target_text)
-    target_text = "<start> " + target_text + " <end>"
-    target_text = re.sub(" +", r" ", target_text)
-    french_sentences.append(target_text)
-    if b:
-        b = False
-        print('First line of text 3')
-        print(target_text)
-
+loadInputAndTarget(e1, f1)
+loadInputAndTarget(e2, f2)
+loadInputAndTarget(e3, f3)
 # Need to filter : keep only phrases where you know all words (keep the 30 000 most used words)
 
 
