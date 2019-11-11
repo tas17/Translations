@@ -74,28 +74,28 @@ french_words_counter = collections.Counter([word for sentence in french_sentence
 # print(french_sentences[0])
 # print([word for word in french_sentences[0].split(" ")])
 
-preproc_english_sentences, preproc_french_sentences, english_tokenizer, french_tokenizer = \
-    preprocess(english_sentences, french_sentences, False)
-
-max_english_sequence_length = preproc_english_sentences.shape[1]
-max_french_sequence_length = preproc_french_sentences.shape[1]
-english_vocab_size = len(english_tokenizer.word_index)
-french_vocab_size = len(french_tokenizer.word_index) + 1  # 0 padding
-
-input_token_index = {word: id for word, id in english_tokenizer.word_index.items()}
-target_token_index = {word: id for word, id in french_tokenizer.word_index.items()}
-reverse_target_char_index = {id: word for word, id in french_tokenizer.word_index.items()}
-print('Shape of preproc_english_sentences', preproc_english_sentences.shape)
-print('Shape of preproc_french_sentences', preproc_french_sentences.shape)
-
-print('Data Preprocessed')
-print("Max English sentence length:", max_english_sequence_length)
-print("Max French sentence length:", max_french_sequence_length)
-print("English vocabulary size:", english_vocab_size)
-print("French vocabulary size:", french_vocab_size)
-
-
-tmp_x = pad(preproc_english_sentences, max_french_sequence_length)
+# preproc_english_sentences, preproc_french_sentences, english_tokenizer, french_tokenizer = \
+#     preprocess(english_sentences, french_sentences, False)
+#
+# max_english_sequence_length = preproc_english_sentences.shape[1]
+# max_french_sequence_length = preproc_french_sentences.shape[1]
+# english_vocab_size = len(english_tokenizer.word_index)
+# french_vocab_size = len(french_tokenizer.word_index) + 1  # 0 padding
+#
+# input_token_index = {word: id for word, id in english_tokenizer.word_index.items()}
+# target_token_index = {word: id for word, id in french_tokenizer.word_index.items()}
+# reverse_target_char_index = {id: word for word, id in french_tokenizer.word_index.items()}
+# print('Shape of preproc_english_sentences', preproc_english_sentences.shape)
+# print('Shape of preproc_french_sentences', preproc_french_sentences.shape)
+#
+# print('Data Preprocessed')
+# print("Max English sentence length:", max_english_sequence_length)
+# print("Max French sentence length:", max_french_sequence_length)
+# print("English vocabulary size:", english_vocab_size)
+# print("French vocabulary size:", french_vocab_size)
+#
+#
+# tmp_x = pad(preproc_english_sentences, max_french_sequence_length)
 
 X_train, X_test, y_train, y_test = train_test_split(english_sentences, french_sentences)
 # X_train, X_test, y_train, y_test = train_test_split(tmp_x, preproc_french_sentences)
