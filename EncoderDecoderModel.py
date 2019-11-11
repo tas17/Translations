@@ -45,13 +45,17 @@ for line in lines:
     if b:
         print(line)
     input_text = line
-    print(input_text)
+    if b:
+        print(input_text)
     input_text = re.sub(r"[.,?!'-;<>#{()}^]", r"", input_text)
-    print(input_text)
+    if b:
+        print(input_text)
     input_text = re.sub(r'"', r"", input_text)
-    print(input_text)
+    if b:
+        print(input_text)
     input_text = re.sub(" +", r" ", input_text)
-    print(input_text)
+    if b:
+        print(input_text)
     english_sentences.append(input_text)
     if b:
         b = False
