@@ -89,7 +89,7 @@ french_words_counter = collections.Counter([word for sentence in french_sentence
 retained_english_words = [x[0] for x in english_words_counter.most_common(30000)]
 # print(french_words_counter.most_common(30000))
 retained_french_words = [x[0] for x in french_words_counter.most_common(30000)]
-print(retained_english_words)
+# print(retained_english_words)
 
 # Need to filter : keep only phrases where you know all words (keep the 30 000 most used words)
 english_sentences = []
@@ -109,6 +109,8 @@ for i, sentenceEngl in enumerate(english_sentences_unfiltered):
     english_sentences.append(sentenceEngl)
     french_sentences.append(sentenceFr)
 
+print(len(english_sentences_unfiltered))
+print(len(french_sentences_unfiltered))
 print(len(english_sentences))
 print(len(french_sentences))
 
