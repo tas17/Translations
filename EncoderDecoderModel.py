@@ -44,6 +44,7 @@ e3 = 'europarl-v7.fr-en.en'
 
 
 def loadInputAndTarget(sI, sO):
+    b = True
     with open(sI, 'r', encoding='utf-8') as fI:
         with open(sO, 'r', encoding='utf-8') as fO:
             linesI = fI.read().split('\n')
@@ -51,6 +52,9 @@ def loadInputAndTarget(sI, sO):
             for i, line in enumerate(linesI):
                 input_text = line
                 target_text = linesO[i]
+                if b:
+                    print(input_text)
+                    print(target_text)
                 if (not hasNumbers(input_text)) and (not hasNumbers(target_text)):
                     input_text = re.sub(r"[.,?!'-;<>#{()}^]", r"", input_text)
                     input_text = re.sub(r'"', r"", input_text)
@@ -61,6 +65,10 @@ def loadInputAndTarget(sI, sO):
                     target_text = "<start> " + target_text + " <end>"
                     target_text = re.sub(" +", r" ", target_text)
                     french_sentences.append(target_text)
+                    if b:
+                        print(input_text)
+                        print(target_text)
+                        b = False
 
 
 loadInputAndTarget(e1, f1)
