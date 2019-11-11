@@ -73,7 +73,7 @@ def loadInputAndTarget(sI, sO):
                         b = False
 
 
-loadInputAndTarget(e1, f1)
+# loadInputAndTarget(e1, f1)  # 183785 vs 183757 !!!
 loadInputAndTarget(e2, f2)
 loadInputAndTarget(e3, f3)
 # Need to filter : keep only phrases where you know all words (keep the 30 000 most used words)
@@ -81,6 +81,8 @@ loadInputAndTarget(e3, f3)
 
 english_words_counter = collections.Counter([word for sentence in english_sentences for word in sentence.split(" ")])
 french_words_counter = collections.Counter([word for sentence in french_sentences for word in sentence.split(" ")])
+print(english_words_counter)
+print(french_words_counter)
 # print(french_sentences[0])
 # print([word for word in french_sentences[0].split(" ")])
 
