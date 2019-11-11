@@ -58,11 +58,13 @@ def loadInputAndTarget(sI, sO):
                     print(input_text)
                     print(target_text)
                 if (not hasNumbers(input_text)) and (not hasNumbers(target_text)):
-                    input_text = re.sub(r"[.,?!'-;<>#{()}^]", r"", input_text)
+                    input_text = re.sub(r"[.,?!-;<>#{()}^]", r"", input_text)
+                    input_text = re.sub(r"'", r" ", input_text)
                     input_text = re.sub(r'"', r"", input_text)
                     input_text = re.sub(" +", r" ", input_text)
                     english_sentences.append(input_text)
-                    target_text = re.sub(r"[.,?!'-;<>#{()}^]", r"", target_text)
+                    target_text = re.sub(r"[.,?!-;<>#{()}^]", r"", target_text)
+                    target_text = re.sub(r"'", r" ", target_text)
                     target_text = re.sub(r'"', r"", target_text)
                     target_text = "<start> " + target_text + " <end>"
                     target_text = re.sub(" +", r" ", target_text)
