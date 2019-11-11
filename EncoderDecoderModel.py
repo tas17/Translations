@@ -86,9 +86,27 @@ english_words_counter = collections.Counter([word for sentence in english_senten
 french_words_counter = collections.Counter([word for sentence in french_sentences_unfiltered for word in sentence.split(" ")])
 
 # print(english_words_counter.most_common(30000))
+retained_english_words = map(english_words_counter.most_common(30000), lambda x: x[0])
 # print(french_words_counter.most_common(30000))
+retained_french_words = map(french_words_counter.most_common(30000), lambda x: x[0])
+print(retained_english_words)
 
 # Need to filter : keep only phrases where you know all words (keep the 30 000 most used words)
+english_sentences = []
+french_sentences = []
+for i, sentenceEngl in enumerate(english_sentences_unfiltered):
+    sentenceFr = french_sentences_unfiltered[i]
+    for wordEngl in sentenceEngl.split(" "):
+        if wordEngl not in retained_english_words:
+            print("English", wordEngl, "not in dic")
+            break
+    for wordFr in sentenceFr.split(" "):
+        if wordFr not in retained_french_words:
+            print("French", wordFr, "not in dic")
+            break
+    english_sentences.append(sentenceEngl)
+    french_sentences.append(sentenceFr)
+
 
 # preproc_english_sentences, preproc_french_sentences, english_tokenizer, french_tokenizer = \
 #     preprocess(english_sentences, french_sentences, False)
