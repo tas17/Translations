@@ -62,13 +62,13 @@ def loadInputAndTarget(sI, sO):
                     input_text = re.sub(r"'", r" ", input_text)
                     input_text = re.sub(r'"', r"", input_text)
                     input_text = re.sub(" +", r" ", input_text)
-                    english_sentences.append(input_text)
+                    english_sentences.append(input_text.lower())
                     target_text = re.sub(r"[.,?!-;<>#{()}^]", r"", target_text)
                     target_text = re.sub(r"'", r" ", target_text)
                     target_text = re.sub(r'"', r"", target_text)
                     target_text = "<start> " + target_text + " <end>"
                     target_text = re.sub(" +", r" ", target_text)
-                    french_sentences.append(target_text)
+                    french_sentences.append(target_text.lower())
                     if b:
                         print(input_text)
                         print(target_text)
