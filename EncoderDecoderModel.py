@@ -49,6 +49,8 @@ def loadInputAndTarget(sI, sO):
         with open(sO, 'r', encoding='utf-8') as fO:
             linesI = fI.read().split('\n')
             linesO = fO.read().split('\n')
+            print("linesI", linesI)
+            print("linesO", linesO)
             for i, line in enumerate(linesI):
                 input_text = line
                 target_text = linesO[i]
