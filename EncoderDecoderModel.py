@@ -13,6 +13,7 @@ from sklearn.model_selection import train_test_split
 MAX_NUMBER_WORD = 30
 max_english_sequence_length = MAX_NUMBER_WORD
 max_french_sequence_length = MAX_NUMBER_WORD
+loadFromScratch = False
 
 def hasNumbers(inputString):
     return bool(re.search(r'\d', inputString))
@@ -86,53 +87,63 @@ def loadInputAndTarget(sI, sO):
 # loadInputAndTarget(e2, f2)
 loadInputAndTarget(e3, f3)
 
-english_words_counter = collections.Counter([word for sentence in english_sentences_unfiltered for word in sentence.split(" ")])
-french_words_counter = collections.Counter([word for sentence in french_sentences_unfiltered for word in sentence.split(" ")])
+if loadFromScratch:
+    english_sentences = []
+    french_sentences = []
+    english_words_counter = collections.Counter([word for sentence in english_sentences_unfiltered for word in sentence.split(" ")])
+    french_words_counter = collections.Counter([word for sentence in french_sentences_unfiltered for word in sentence.split(" ")])
 
-# print(english_words_counter.most_common(30000))
-retained_english_words = [x[0] for x in english_words_counter.most_common(30000)]
-english_vocab_size = 30000
-# print(french_words_counter.most_common(30000))
-retained_french_words = [x[0] for x in french_words_counter.most_common(30000)]
-french_vocab_size = 30000
-# print(retained_english_words)
+    # print(english_words_counter.most_common(30000))
+    retained_english_words = [x[0] for x in english_words_counter.most_common(30000)]
+    english_vocab_size = 30000
+    # print(french_words_counter.most_common(30000))
+    retained_french_words = [x[0] for x in french_words_counter.most_common(30000)]
+    french_vocab_size = 30000
+    # print(retained_english_words)
 
-print("retaining", len(retained_english_words), "english words")
-print("retaining", len(retained_french_words), "french words")
+    print("retaining", len(retained_english_words), "english words")
+    print("retaining", len(retained_french_words), "french words")
 
-# Need to filter : keep only phrases where you know all words (keep the 30 000 most used words)
-english_sentences = []
-french_sentences = []
-for i, sentenceEngl in enumerate(english_sentences_unfiltered):
-    keep = True
-    sentenceFr = french_sentences_unfiltered[i]
-    for wordEngl in sentenceEngl.split(" "):
-        if wordEngl not in retained_english_words:
-            # print("English", wordEngl, "not in dic")
-            # print(retained_english_words)
-            keep = False
-            break
-    if keep:
-        for wordFr in sentenceFr.split(" "):
-            if (not wordFr == '<start>') and (not wordFr == '<end>') and wordFr not in retained_french_words:
-                # print("French", wordFr, "not in dic")
-                # print(retained_french_words)
+    # Need to filter : keep only phrases where you know all words (keep the 30 000 most used words)
+
+    for i, sentenceEngl in enumerate(english_sentences_unfiltered):
+        keep = True
+        sentenceFr = french_sentences_unfiltered[i]
+        for wordEngl in sentenceEngl.split(" "):
+            if wordEngl not in retained_english_words:
+                # print("English", wordEngl, "not in dic")
+                # print(retained_english_words)
                 keep = False
                 break
-    if keep:
-        english_sentences.append(sentenceEngl)
-        french_sentences.append(sentenceFr)
+        if keep:
+            for wordFr in sentenceFr.split(" "):
+                if (not wordFr == '<start>') and (not wordFr == '<end>') and wordFr not in retained_french_words:
+                    # print("French", wordFr, "not in dic")
+                    # print(retained_french_words)
+                    keep = False
+                    break
+        if keep:
+            english_sentences.append(sentenceEngl)
+            french_sentences.append(sentenceFr)
 
-print(len(english_sentences_unfiltered))
-print(len(french_sentences_unfiltered))
+    print(len(english_sentences_unfiltered))
+    print(len(french_sentences_unfiltered))
+    print(len(english_sentences))
+    print(len(french_sentences))
+    with open('saved_EnglishTrain3', 'w') as f:
+        for item in english_sentences:
+            f.write("%s\n" % item)
+    with open('saved_FrenchTrain3', 'w') as f:
+        for item in french_sentences:
+            f.write("%s\n" % item)
+else:
+    with open('saved_EnglishTrain3', 'r') as f:
+       english_sentences = f.read().split('\n')
+    with open('saved_FrenchTrain3', 'r') as f:
+        french_sentences = f.read().split('\n')
+
 print(len(english_sentences))
 print(len(french_sentences))
-with open('saved_EnglishTrain3', 'w') as f:
-    for item in english_sentences:
-        f.write("%s\n" % item)
-with open('saved_FrenchTrain3', 'w') as f:
-    for item in french_sentences:
-        f.write("%s\n" % item)
 
 preproc_english_sentences, preproc_french_sentences, english_tokenizer, french_tokenizer = \
     preprocess(english_sentences, french_sentences, False)
