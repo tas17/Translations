@@ -6,6 +6,7 @@ import collections
 import numpy as np
 import gensim
 import nltk
+import pickle
 import re
 from sklearn.model_selection import train_test_split
 
@@ -14,6 +15,7 @@ MAX_NUMBER_WORD = 30
 max_english_sequence_length = MAX_NUMBER_WORD
 max_french_sequence_length = MAX_NUMBER_WORD
 loadFromScratch = False
+
 
 def hasNumbers(inputString):
     return bool(re.search(r'\d', inputString))
@@ -147,6 +149,12 @@ print(len(french_sentences))
 
 preproc_english_sentences, preproc_french_sentences, english_tokenizer, french_tokenizer = \
     preprocess(english_sentences, french_sentences, False)
+
+
+with open('english_tokenizer.pickle', 'wb') as handle:
+    pickle.dump(english_tokenizer, handle, protocol=pickle.HIGHEST_PROTOCOL)
+with open('french_tokenizer.pickle', 'wb') as handle:
+    pickle.dump(french_tokenizer, handle, protocol=pickle.HIGHEST_PROTOCOL)
 
 # max_english_sequence_length = preproc_english_sentences.shape[1]
 # max_french_sequence_length = preproc_french_sentences.shape[1]
