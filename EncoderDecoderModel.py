@@ -5,6 +5,7 @@ from models import encoder_decoderRMSProp, encoder_decoderAdam, encoder_decoderA
 import collections
 import numpy as np
 import gensim
+import nltk
 import re
 from sklearn.model_selection import train_test_split
 
@@ -215,7 +216,7 @@ print(model.summary())
 train_samples = len(X_train)
 val_samples = len(X_test)
 batch_size = 128
-epochs = 50
+epochs = 1
 
 model.fit_generator(generator=generate_batch(X_train, y_train, batch_size=batch_size),
                     steps_per_epoch=train_samples/batch_size,
