@@ -250,8 +250,8 @@ model.fit_generator(generator=generate_batch(X_train, y_train, batch_size=batch_
 
 # model.fit(X_train, y_train, batch_size=batch_size, epochs=epochs, validation_split=0.2)
 
-model.save("models/NDS_EncoderDecoderModel"+str(mode))
-model.save_weights('models/NDS_EncoderDecoder_weights'+str(mode)+'.h5')
+model.save("models/NDS_1ep"+str(mode))
+model.save_weights('models/NDS_1ep'+str(mode)+'.h5')
 # model.load_weights('models/EncoderDecoder_weights.h5')
 
 
