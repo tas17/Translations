@@ -236,7 +236,7 @@ def encoder_decoderAdamBiggerLSTMCapacity(english_vocab_size, french_vocab_size)
 
     # Set up the decoder, using `encoder_states` as initial state
     decoder_inputs = Input(shape=(None,))
-    dec_emb_layer = Embedding(french_vocab_size, latent_dim, mask_zero=True)
+    dec_emb_layer = Embedding(french_vocab_size, latent_dim*10, mask_zero=True)
     dec_emb = dec_emb_layer(decoder_inputs)
 
     # We set up our decoder to return full output sequences,
