@@ -224,6 +224,7 @@ def custom_accuracy(y_true, y_pred):
                 ), K.floatx() 
             ), axis=-1)
 
+
 def encoder_decoderAdamBiggerLSTMCapacity(english_vocab_size, french_vocab_size):
     # Encoder
     encoder_inputs = Input(shape=(None,))
