@@ -138,23 +138,27 @@ if loadFromScratch:
     with open('saved_FrenchTrain3', 'w') as f:
         for item in french_sentences:
             f.write("%s\n" % item)
+    preproc_english_sentences, preproc_french_sentences, english_tokenizer, french_tokenizer = \
+        preprocess(english_sentences, french_sentences, False)
+    with open('pickle_english_tokenizer3.pickle', 'wb') as handle:
+        pickle.dump(english_tokenizer, handle, protocol=pickle.HIGHEST_PROTOCOL)
+    with open('pickle_french_tokenizer3.pickle', 'wb') as handle:
+        pickle.dump(french_tokenizer, handle, protocol=pickle.HIGHEST_PROTOCOL)
+
 else:
     with open('saved_EnglishTrain3', 'r') as f:
-       english_sentences = f.read().split('\n')
+        english_sentences = f.read().split('\n')
     with open('saved_FrenchTrain3', 'r') as f:
         french_sentences = f.read().split('\n')
+    with open('pickle_english_tokenizer3.pickle', 'rb') as handle:
+        english_tokenizer = pickle.load(handle)
+    with open('pickle_french_tokenizer3.pickle', 'rb') as handle:
+        french_tokenizer = pickle.load(handle)
 
 print(len(english_sentences))
 print(len(french_sentences))
 
-preproc_english_sentences, preproc_french_sentences, english_tokenizer, french_tokenizer = \
-    preprocess(english_sentences, french_sentences, False)
 
-
-with open('english_tokenizer.pickle', 'wb') as handle:
-    pickle.dump(english_tokenizer, handle, protocol=pickle.HIGHEST_PROTOCOL)
-with open('french_tokenizer.pickle', 'wb') as handle:
-    pickle.dump(french_tokenizer, handle, protocol=pickle.HIGHEST_PROTOCOL)
 
 # max_english_sequence_length = preproc_english_sentences.shape[1]
 # max_french_sequence_length = preproc_french_sentences.shape[1]
