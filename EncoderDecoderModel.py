@@ -164,10 +164,11 @@ print(len(french_sentences))
 # max_french_sequence_length = preproc_french_sentences.shape[1]
 # english_vocab_size = len(english_tokenizer.word_index)
 # french_vocab_size = len(french_tokenizer.word_index) + 1  # 0 padding
-#
+
 input_token_index = {word: id for word, id in english_tokenizer.word_index.items()}
 target_token_index = {word: id for word, id in french_tokenizer.word_index.items()}
 reverse_target_char_index = {id: word for word, id in french_tokenizer.word_index.items()}
+
 # print('Shape of preproc_english_sentences', preproc_english_sentences.shape)
 # print('Shape of preproc_french_sentences', preproc_french_sentences.shape)
 #

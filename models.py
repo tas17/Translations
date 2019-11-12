@@ -268,16 +268,16 @@ def encoder_decoderAdamBiggerLSTMCapacity(english_vocab_size, french_vocab_size)
     dec_emb2 = dec_emb_layer(decoder_inputs) # Get the embeddings of the decoder sequence
 
     # To predict the next word in the sequence, set the initial states to the states from the previous time step
-    # decoder_outputs2, state_h2, state_c2 = decoder_lstm(dec_emb2, initial_state=decoder_states_inputs)
-    # decoder_states2 = [state_h2, state_c2]
-    # decoder_outputs2 = decoder_dense(decoder_outputs2)
+    decoder_outputs2, state_h2, state_c2 = decoder_lstm(dec_emb2, initial_state=decoder_states_inputs)
+    decoder_states2 = [state_h2, state_c2]
+    decoder_outputs2 = decoder_dense(decoder_outputs2)
 
     # Final decoder model
-    # decoder_model = Model(
-    #     [decoder_inputs] + decoder_states_inputs,
-    #     [decoder_outputs2] + decoder_states2)
+    decoder_model = Model(
+        [decoder_inputs] + decoder_states_inputs,
+        [decoder_outputs2] + decoder_states2)
 
-    return model, encoder_model, 0
+    return model, encoder_model, decoder_model
 
 
 def encoder_decoderAdamBiggerEmbed(english_vocab_size, french_vocab_size):
