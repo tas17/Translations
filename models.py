@@ -243,7 +243,7 @@ def encoder_decoderAdamBiggerLSTMCapacity(english_vocab_size, french_vocab_size)
     # We set up our decoder to return full output sequences,
     # and to return internal states as well. We don't use the
     # return states in the training model, but we will use them in inference.
-    decoder_lstm = LSTM(latent_dim*10, return_sequences=True, return_state=True, input_shape=(latent_dim*10,))
+    decoder_lstm = LSTM(latent_dim*10, return_sequences=True, return_state=True, input_shape=(None,))
     decoder_outputs, _, _ = decoder_lstm(decoder_inputs, initial_state=encoder_states)
 
     # Use a softmax to generate a probability distribution over the target vocabulary for each time step
