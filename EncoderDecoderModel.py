@@ -126,6 +126,12 @@ print(len(english_sentences_unfiltered))
 print(len(french_sentences_unfiltered))
 print(len(english_sentences))
 print(len(french_sentences))
+with open('saved_EnglishTrain3', 'w') as f:
+    for item in english_sentences:
+        f.write("%s\n" % item)
+with open('saved_FrenchTrain3', 'w') as f:
+    for item in french_sentences:
+        f.write("%s\n" % item)
 
 preproc_english_sentences, preproc_french_sentences, english_tokenizer, french_tokenizer = \
     preprocess(english_sentences, french_sentences, False)
@@ -150,7 +156,7 @@ reverse_target_char_index = {id: word for word, id in french_tokenizer.word_inde
 #
 # tmp_x = pad(preproc_english_sentences, max_french_sequence_length)
 
-X_train, X_test, y_train, y_test = train_test_split(english_sentences, french_sentences)
+X_train, X_test, y_train, y_test = train_test_split(english_sentences, french_sentences, random_state=42)
 # X_train, X_test, y_train, y_test = train_test_split(tmp_x, preproc_french_sentences)
 
 #1 X_train = X_train.reshape((-1, y_train.shape[-2], 1))
