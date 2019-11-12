@@ -235,15 +235,15 @@ def encoder_decoderAdamBiggerLSTMCapacity(english_vocab_size, french_vocab_size)
     encoder_states = [state_h, state_c]
 
     # Set up the decoder, using `encoder_states` as initial state
-    decoder_inputs = Input(shape=(None,))
-    dec_emb_layer = Embedding(french_vocab_size, latent_dim, mask_zero=True)
-    dec_emb = dec_emb_layer(decoder_inputs)
+    decoder_inputs = Input(shape=(latent_dim*10,))
+    # dec_emb_layer = Embedding(french_vocab_size, latent_dim, mask_zero=True)
+    # dec_emb = dec_emb_layer(decoder_inputs)
 
     # We set up our decoder to return full output sequences,
     # and to return internal states as well. We don't use the
     # return states in the training model, but we will use them in inference.
     decoder_lstm = LSTM(latent_dim*10, return_sequences=True, return_state=True)
-    decoder_outputs, _, _ = decoder_lstm(dec_emb, initial_state=encoder_states)
+    decoder_outputs, _, _ = decoder_lstm(decoder_inputs, initial_state=encoder_states)
 
     # Use a softmax to generate a probability distribution over the target vocabulary for each time step
     decoder_dense = Dense(french_vocab_size, activation='softmax')
@@ -261,14 +261,14 @@ def encoder_decoderAdamBiggerLSTMCapacity(english_vocab_size, french_vocab_size)
 
     # Decoder setup
     # Below tensors will hold the states of the previous time step
-    decoder_state_input_h = Input(shape=(latent_dim,))
-    decoder_state_input_c = Input(shape=(latent_dim,))
+    decoder_state_input_h = Input(shape=(latent_dim*10,))
+    decoder_state_input_c = Input(shape=(latent_dim*10,))
     decoder_states_inputs = [decoder_state_input_h, decoder_state_input_c]
 
-    dec_emb2 = dec_emb_layer(decoder_inputs) # Get the embeddings of the decoder sequence
+    # dec_emb2 = dec_emb_layer(decoder_inputs) # Get the embeddings of the decoder sequence
 
     # To predict the next word in the sequence, set the initial states to the states from the previous time step
-    decoder_outputs2, state_h2, state_c2 = decoder_lstm(dec_emb2, initial_state=decoder_states_inputs)
+    decoder_outputs2, state_h2, state_c2 = decoder_lstm(decoder_inputs, initial_state=decoder_states_inputs)
     decoder_states2 = [state_h2, state_c2]
     decoder_outputs2 = decoder_dense(decoder_outputs2)
 
