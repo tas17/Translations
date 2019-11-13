@@ -215,7 +215,7 @@ def generate_batch(X=X_train, y=y_train, batch_size=128):
                             decoder_target_data[i, t - 1, target_token_index[word]] = 1.
                         except:
                             pass
-            yield([encoder_input_data, decoder_input_data.reshape((batch_size, max_french_sequence_length, 1))], decoder_target_data)
+            yield([encoder_input_data, decoder_input_data], decoder_target_data)
 
 
 # model, encoder_model, decoder_model = encoder_decoder(english_vocab_size, french_vocab_size)
