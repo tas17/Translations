@@ -91,7 +91,7 @@ french_vocab_size = 30000
 if loadFromScratch:
     # loadInputAndTarget(e1, f1)  # 183785 vs 183757 !!!
     loadInputAndTarget(e2, f2)
-    # loadInputAndTarget(e3, f3)
+    loadInputAndTarget(e3, f3)
 
     english_sentences = []
     french_sentences = []
@@ -133,27 +133,27 @@ if loadFromScratch:
     print(len(french_sentences_unfiltered))
     print(len(english_sentences))
     print(len(french_sentences))
-    with open('saved_EnglishTrain2', 'w') as f:
+    with open('saved_EnglishTrain23', 'w') as f:
         for item in english_sentences:
             f.write("%s\n" % item)
-    with open('saved_FrenchTrain2', 'w') as f:
+    with open('saved_FrenchTrain23', 'w') as f:
         for item in french_sentences:
             f.write("%s\n" % item)
     preproc_english_sentences, preproc_french_sentences, english_tokenizer, french_tokenizer = \
         preprocess(english_sentences, french_sentences, False)
-    with open('pickle_english_tokenizer2.pickle', 'wb') as handle:
+    with open('pickle_english_tokenizer23.pickle', 'wb') as handle:
         pickle.dump(english_tokenizer, handle, protocol=pickle.HIGHEST_PROTOCOL)
-    with open('pickle_french_tokenizer2.pickle', 'wb') as handle:
+    with open('pickle_french_tokenizer23.pickle', 'wb') as handle:
         pickle.dump(french_tokenizer, handle, protocol=pickle.HIGHEST_PROTOCOL)
 
 else:
-    with open('saved_EnglishTrain3', 'r') as f:
+    with open('saved_EnglishTrain23', 'r') as f:
         english_sentences = f.read().split('\n')
-    with open('saved_FrenchTrain3', 'r') as f:
+    with open('saved_FrenchTrain23', 'r') as f:
         french_sentences = f.read().split('\n')
-    with open('pickle_english_tokenizer3.pickle', 'rb') as handle:
+    with open('pickle_english_tokenizer23.pickle', 'rb') as handle:
         english_tokenizer = pickle.load(handle)
-    with open('pickle_french_tokenizer3.pickle', 'rb') as handle:
+    with open('pickle_french_tokenizer23.pickle', 'rb') as handle:
         french_tokenizer = pickle.load(handle)
 
 print(len(english_sentences))
