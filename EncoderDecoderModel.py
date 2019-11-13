@@ -252,7 +252,7 @@ print(model.summary())
 train_samples = len(X_train)
 val_samples = len(X_test)
 batch_size = 128
-epochs = 1
+epochs = 50
 
 model.fit_generator(generator=generate_batch(X_train, y_train, batch_size=batch_size),
                     steps_per_epoch=train_samples/batch_size,
