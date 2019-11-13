@@ -223,7 +223,7 @@ def generate_batch(X=X_train, y=y_train, batch_size=128):
 mode = 0
 if mode == 0:
     model, encoder_model, decoder_model = \
-        encoder_decoderAdamBiggerLSTMCapacityWithoutTeacherForcing(english_vocab_size, french_vocab_size)
+        encoder_decoderAdamBiggerLSTMCapacityWithoutTeacherForcing(english_vocab_size, french_vocab_size, MAX_NUMBER_WORD)
 else:
     if mode == 1:
         model, encoder_model, decoder_model = \

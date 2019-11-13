@@ -281,7 +281,7 @@ def encoder_decoderAdamBiggerLSTMCapacity(english_vocab_size, french_vocab_size)
     return model, encoder_model, decoder_model
 
 
-def encoder_decoderAdamBiggerLSTMCapacityWithoutTeacherForcing(english_vocab_size, french_vocab_size):
+def encoder_decoderAdamBiggerLSTMCapacityWithoutTeacherForcing(english_vocab_size, french_vocab_size, max_words):
     # Encoder
     encoder_inputs = Input(shape=(None,))
     enc_emb = Embedding(english_vocab_size, latent_dim, mask_zero=True)(encoder_inputs)
@@ -292,7 +292,7 @@ def encoder_decoderAdamBiggerLSTMCapacityWithoutTeacherForcing(english_vocab_siz
     encoder_states = [state_h, state_c]
 
     # Set up the decoder, using `encoder_states` as initial state
-    decoder_inputs = Input(shape=(None,))
+    decoder_inputs = Input(shape=(max_words,1,))
     # dec_emb_layer = Embedding(french_vocab_size, latent_dim*10, mask_zero=True)
     # dec_emb = dec_emb_layer(decoder_inputs)
 
