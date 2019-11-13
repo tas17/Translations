@@ -2,7 +2,7 @@ from loader import load_data
 from helper import tokenize, pad, preprocess, sequence_to_text, logits_to_text, text_to_sequence
 from models import encoder_decoderRMSProp, encoder_decoderAdam, encoder_decoderAdamBiggerEmbed, \
     encoder_decoderAdamOneEmbed, encoder_decoderAdamFast, encoder_decoderAdamBiggerLSTMCapacity, \
-    encoder_decoderAdamBiggerLSTMCapacityWithoutTeacherForcing
+    encoder_decoderAdamBidirectionalLSTM, encoder_decoderAdamBiggerLSTMCapacityOneEmbed
 import collections
 import numpy as np
 import gensim
@@ -220,10 +220,10 @@ def generate_batch(X=X_train, y=y_train, batch_size=128):
 
 # model, encoder_model, decoder_model = encoder_decoder(english_vocab_size, french_vocab_size)
 # HERE models
-mode = 0
+mode = 5
 if mode == 0:
     model, encoder_model, decoder_model = \
-        encoder_decoderAdamBiggerLSTMCapacityWithoutTeacherForcing(english_vocab_size, french_vocab_size, MAX_NUMBER_WORD)
+        encoder_decoderAdamBiggerLSTMCapacityOneEmbed(english_vocab_size, french_vocab_size, MAX_NUMBER_WORD)
 else:
     if mode == 1:
         model, encoder_model, decoder_model = \
@@ -240,6 +240,10 @@ else:
                 if mode == 4:
                     model, encoder_model, decoder_model = \
                         encoder_decoderAdamFast(english_vocab_size, french_vocab_size)
+                else:
+                    if mode == 5:
+                        model, encoder_model, decoder_model = \
+                            encoder_decoderAdamBidirectionalLSTM(english_vocab_size, french_vocab_size, MAX_NUMBER_WORD)
 
 
 print(model.summary())
