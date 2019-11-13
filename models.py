@@ -300,6 +300,9 @@ def encoder_decoderAdamBiggerLSTMCapacityWithoutTeacherForcing(english_vocab_siz
     # and to return internal states as well. We don't use the
     # return states in the training model, but we will use them in inference.
     decoder_lstm = LSTM(latent_dim*10, return_sequences=True, return_state=True)
+    print(decoder_inputs)
+    print(decoder_inputs.shape)
+
     decoder_outputs, _, _ = decoder_lstm(decoder_inputs, initial_state=encoder_states)
 
     # Use a softmax to generate a probability distribution over the target vocabulary for each time step
