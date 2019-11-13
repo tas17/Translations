@@ -341,12 +341,11 @@ def encoder_decoderAdamBiggerLSTMCapacityOneEmbed(english_vocab_size, french_voc
     return model, encoder_model, decoder_model
 
 
-# Final model before adding without teacher forcing
-def encoder_decoderAdamBidirectionalLSTM(english_vocab_size, french_vocab_size, max_words):
+def encoder_decoderAdamWithoutTeacherForcing(english_vocab_size, french_vocab_size, max_words):
     # Encoder
     encoder_inputs = Input(shape=(None,))
     enc_emb = Embedding(english_vocab_size, latent_dim, mask_zero=True)(encoder_inputs)
-    encoder_lstm = Bidirectional(LSTM(latent_dim*10, return_state=True))
+    encoder_lstm = LSTM(latent_dim*10, return_state=True)
     encoder_outputs, state_h, state_c = encoder_lstm(enc_emb)
 
     # Only keeping the states

@@ -2,7 +2,7 @@ from loader import load_data
 from helper import tokenize, pad, preprocess, sequence_to_text, logits_to_text, text_to_sequence
 from models import encoder_decoderRMSProp, encoder_decoderAdam, encoder_decoderAdamBiggerEmbed, \
     encoder_decoderAdamOneEmbed, encoder_decoderAdamFast, encoder_decoderAdamBiggerLSTMCapacity, \
-    encoder_decoderAdamBidirectionalLSTM, encoder_decoderAdamBiggerLSTMCapacityOneEmbed
+    encoder_decoderAdamWithoutTeacherForcing, encoder_decoderAdamBiggerLSTMCapacityOneEmbed
 import collections
 import numpy as np
 import gensim
@@ -191,7 +191,7 @@ X_train, X_test, y_train, y_test = train_test_split(english_sentences, french_se
 # X_test = X_test.reshape((-1, y_test.shape[-2]))
 
 
-def generate_batch(X=X_train, y=y_train, batch_size=128):
+def generate_batch(X=X_train, y=y_train, batch_size=128, oneEmbed=True):
     while True:
         for j in range(0, len(X), batch_size):
             encoder_input_data = np.zeros((batch_size, max_english_sequence_length), dtype='float32')
@@ -215,12 +215,14 @@ def generate_batch(X=X_train, y=y_train, batch_size=128):
                             decoder_target_data[i, t - 1, target_token_index[word]] = 1.
                         except:
                             pass
-            yield([encoder_input_data, decoder_input_data.reshape((batch_size, max_french_sequence_length, 1))], decoder_target_data)
-
+            if oneEmbed:
+                yield([encoder_input_data, decoder_input_data.reshape((batch_size, max_french_sequence_length, 1))], decoder_target_data)
+            else:
+                yield([encoder_input_data, decoder_input_data], decoder_target_data)
 
 # model, encoder_model, decoder_model = encoder_decoder(english_vocab_size, french_vocab_size)
 # HERE models
-mode = 5
+mode = 0
 if mode == 0:
     model, encoder_model, decoder_model = \
         encoder_decoderAdamBiggerLSTMCapacityOneEmbed(english_vocab_size, french_vocab_size, MAX_NUMBER_WORD)
@@ -243,7 +245,7 @@ else:
                 else:
                     if mode == 5:
                         model, encoder_model, decoder_model = \
-                            encoder_decoderAdamBidirectionalLSTM(english_vocab_size, french_vocab_size, MAX_NUMBER_WORD)
+                            encoder_decoderAdamWithoutTeacherForcing(english_vocab_size, french_vocab_size, MAX_NUMBER_WORD)
 
 
 print(model.summary())
