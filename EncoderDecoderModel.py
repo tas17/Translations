@@ -222,7 +222,7 @@ def generate_batch(X=X_train, y=y_train, batch_size=128, oneEmbed=True):
 
 # model, encoder_model, decoder_model = encoder_decoder(english_vocab_size, french_vocab_size)
 # HERE models
-mode = 0
+mode = 3
 if mode == 0:
     model, encoder_model, decoder_model = \
         encoder_decoderAdamBiggerLSTMCapacityOneEmbed(english_vocab_size, french_vocab_size, MAX_NUMBER_WORD)
@@ -290,7 +290,7 @@ def decode_sequence(input_seq):
         # Exit condition: either hit max length
         # or find stop character.
         if (sampled_char == '<end>' or
-           len(decoded_sentence) > 50):
+           len(decoded_sentence) > 30):
             stop_condition = True
 
         # Update the target sequence (of length 1).
