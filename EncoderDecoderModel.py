@@ -1,7 +1,8 @@
 from loader import load_data
 from helper import tokenize, pad, preprocess, sequence_to_text, logits_to_text, text_to_sequence
 from models import encoder_decoderRMSProp, encoder_decoderAdam, encoder_decoderAdamBiggerEmbed, \
-    encoder_decoderAdamOneEmbed, encoder_decoderAdamFast, encoder_decoderAdamBiggerLSTMCapacity
+    encoder_decoderAdamOneEmbed, encoder_decoderAdamFast, encoder_decoderAdamBiggerLSTMCapacity, \
+    encoder_decoderAdamBiggerLSTMCapacityWithoutTeacherForcing
 import collections
 import numpy as np
 import gensim
@@ -219,21 +220,26 @@ def generate_batch(X=X_train, y=y_train, batch_size=128):
 
 # model, encoder_model, decoder_model = encoder_decoder(english_vocab_size, french_vocab_size)
 # HERE models
-mode = 3
+mode = 0
 if mode == 0:
-    model, encoder_model, decoder_model = encoder_decoderRMSProp(english_vocab_size, french_vocab_size)
+    model, encoder_model, decoder_model = \
+        encoder_decoderAdamBiggerLSTMCapacityWithoutTeacherForcing(english_vocab_size, french_vocab_size)
 else:
     if mode == 1:
-        model, encoder_model, decoder_model = encoder_decoderAdam(english_vocab_size, french_vocab_size)
+        model, encoder_model, decoder_model = \
+            encoder_decoderAdam(english_vocab_size, french_vocab_size)
     else:
         if mode == 2:
-            model, encoder_model, decoder_model = encoder_decoderAdamBiggerEmbed(english_vocab_size, french_vocab_size)
+            model, encoder_model, decoder_model = \
+                encoder_decoderAdamBiggerEmbed(english_vocab_size, french_vocab_size)
         else:
             if mode == 3:
-                model, encoder_model, decoder_model = encoder_decoderAdamBiggerLSTMCapacity(english_vocab_size, french_vocab_size)
+                model, encoder_model, decoder_model = \
+                    encoder_decoderAdamBiggerLSTMCapacity(english_vocab_size, french_vocab_size)
             else:
                 if mode == 4:
-                    model, encoder_model, decoder_model = encoder_decoderAdamFast(english_vocab_size, french_vocab_size)
+                    model, encoder_model, decoder_model = \
+                        encoder_decoderAdamFast(english_vocab_size, french_vocab_size)
 
 
 print(model.summary())
