@@ -15,7 +15,7 @@ from sklearn.model_selection import train_test_split
 MAX_NUMBER_WORD = 30
 max_english_sequence_length = MAX_NUMBER_WORD
 max_french_sequence_length = MAX_NUMBER_WORD
-loadFromScratch = True
+loadFromScratch = False
 
 
 def hasNumbers(inputString):
