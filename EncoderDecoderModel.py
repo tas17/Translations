@@ -254,10 +254,10 @@ val_samples = len(X_test)
 batch_size = 128
 epochs = 50
 
-model.fit_generator(generator=generate_batch(X_train, y_train, batch_size=batch_size),
+model.fit_generator(generator=generate_batch(X_train, y_train, batch_size=batch_size, oneEmbed=False),
                     steps_per_epoch=train_samples/batch_size,
                     epochs=epochs,
-                    validation_data=generate_batch(X_test, y_test, batch_size=batch_size),
+                    validation_data=generate_batch(X_test, y_test, batch_size=batch_size, oneEmbed=False),
                     validation_steps=val_samples/batch_size)
 
 # model.fit(X_train, y_train, batch_size=batch_size, epochs=epochs, validation_split=0.2)
