@@ -2,7 +2,8 @@ from loader import load_data
 from helper import tokenize, pad, preprocess, sequence_to_text, logits_to_text, text_to_sequence
 from models import encoder_decoderRMSProp, encoder_decoderAdam, encoder_decoderAdamBiggerEmbed, \
     encoder_decoderAdamOneEmbed, encoder_decoderAdamFast, encoder_decoderAdamBiggerLSTMCapacity, \
-    encoder_decoderAdamWithoutTeacherForcing, encoder_decoderAdamBiggerLSTMCapacityOneEmbed, modelWithAttention
+    encoder_decoderAdamWithoutTeacherForcing, encoder_decoderAdamBiggerLSTMCapacityOneEmbed, modelWithAttention, \
+    modelWithAttentionBidirectional
 import collections
 import numpy as np
 import gensim
@@ -222,7 +223,7 @@ def generate_batch(X=X_train, y=y_train, batch_size=128, oneEmbed=True):
 
 # model, encoder_model, decoder_model = encoder_decoder(english_vocab_size, french_vocab_size)
 # HERE models
-mode = 6
+mode = 7
 if mode == 0:
     model, encoder_model, decoder_model = \
         encoder_decoderAdamBiggerLSTMCapacityOneEmbed(english_vocab_size, french_vocab_size, MAX_NUMBER_WORD)
@@ -251,7 +252,11 @@ else:
                         if mode == 6:
                             model, encoder_model, decoder_model = modelWithAttention(english_vocab_size,
                                                                                      french_vocab_size, MAX_NUMBER_WORD)
-
+                        else:
+                            if mode == 7:
+                                model, encoder_model, decoder_model = \
+                                    modelWithAttentionBidirectional(english_vocab_size, french_vocab_size,
+                                                                    MAX_NUMBER_WORD)
 
 print(model.summary())
 train_samples = len(X_train)
