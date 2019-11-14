@@ -450,7 +450,7 @@ def modelWithAttentionBidirectional(english_vocab_size, french_vocab_size, max_w
     encoder_states = [state_h, state_c]
 
     decoder_inputs = Input(shape=(max_words, 1,))
-    decoder_lstm = LSTM(latent_dim * 10, return_sequences=True, return_state=True)
+    decoder_lstm = LSTM(latent_dim * 20, return_sequences=True, return_state=True)
     a = Permute((2, 1))(decoder_inputs)
     a = Dense(max_words, activation='softmax')(a)
     a_probs = Permute((2, 1), name='attention_vec')(a)
