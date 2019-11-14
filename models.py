@@ -445,9 +445,9 @@ def modelWithAttentionBidirectional(english_vocab_size, french_vocab_size, max_w
     enc_emb = Embedding(english_vocab_size, latent_dim, mask_zero=True)(encoder_inputs)
     encoder_lstm = Bidirectional(LSTM(latent_dim * 10, return_state=True))
     encoder_outputs, forward_h, forward_c, backward_h, backward_c = encoder_lstm(enc_emb)
-    state_h = Concatenate()(forward_h, backward_h)
-    state_c = Concatenate()(forward_c, backward_c)
-    encoder_states = [state_h, state_c]
+    state_h = Concatenate()([transpose(forward_h), transpose(backward_h)])
+    state_c = Concatenate()([transpose(forward_c), transpose(backward_c)])
+    encoder_states = [transpose(state_h), transpose(state_c)]
 
     decoder_inputs = Input(shape=(max_words, 1,))
     decoder_lstm = LSTM(latent_dim * 20, return_sequences=True, return_state=True)
