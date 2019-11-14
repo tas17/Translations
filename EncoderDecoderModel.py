@@ -2,7 +2,7 @@ from loader import load_data
 from helper import tokenize, pad, preprocess, sequence_to_text, logits_to_text, text_to_sequence
 from models import encoder_decoderRMSProp, encoder_decoderAdam, encoder_decoderAdamBiggerEmbed, \
     encoder_decoderAdamOneEmbed, encoder_decoderAdamFast, encoder_decoderAdamBiggerLSTMCapacity, \
-    encoder_decoderAdamWithoutTeacherForcing, encoder_decoderAdamBiggerLSTMCapacityOneEmbed
+    encoder_decoderAdamWithoutTeacherForcing, encoder_decoderAdamBiggerLSTMCapacityOneEmbed, modelWithAttention
 import collections
 import numpy as np
 import gensim
@@ -222,7 +222,7 @@ def generate_batch(X=X_train, y=y_train, batch_size=128, oneEmbed=True):
 
 # model, encoder_model, decoder_model = encoder_decoder(english_vocab_size, french_vocab_size)
 # HERE models
-mode = 3
+mode = 6
 if mode == 0:
     model, encoder_model, decoder_model = \
         encoder_decoderAdamBiggerLSTMCapacityOneEmbed(english_vocab_size, french_vocab_size, MAX_NUMBER_WORD)
@@ -245,7 +245,12 @@ else:
                 else:
                     if mode == 5:
                         model, encoder_model, decoder_model = \
-                            encoder_decoderAdamWithoutTeacherForcing(english_vocab_size, french_vocab_size, MAX_NUMBER_WORD)
+                            encoder_decoderAdamWithoutTeacherForcing(english_vocab_size, french_vocab_size,
+                                                                     MAX_NUMBER_WORD)
+                    else:
+                        if mode == 6:
+                            model, encoder_model, decoder_model = modelWithAttention(english_vocab_size,
+                                                                                     french_vocab_size, MAX_NUMBER_WORD)
 
 
 print(model.summary())
@@ -254,10 +259,10 @@ val_samples = len(X_test)
 batch_size = 128
 epochs = 50
 
-model.fit_generator(generator=generate_batch(X_train, y_train, batch_size=batch_size, oneEmbed=False),
+model.fit_generator(generator=generate_batch(X_train, y_train, batch_size=batch_size),
                     steps_per_epoch=train_samples/batch_size,
                     epochs=epochs,
-                    validation_data=generate_batch(X_test, y_test, batch_size=batch_size, oneEmbed=False),
+                    validation_data=generate_batch(X_test, y_test, batch_size=batch_size),
                     validation_steps=val_samples/batch_size)
 
 # model.fit(X_train, y_train, batch_size=batch_size, epochs=epochs, validation_split=0.2)

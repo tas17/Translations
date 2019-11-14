@@ -1,6 +1,6 @@
 from keras.models import Sequential
 from keras.losses import sparse_categorical_crossentropy
-from keras.layers import GRU, LSTM, Dense, Dropout, Input, RepeatVector, CuDNNLSTM, Bidirectional
+from keras.layers import GRU, LSTM, Dense, Dropout, Input, RepeatVector, CuDNNLSTM, Bidirectional, Permute, Reshape, Concatenate
 from keras.layers.embeddings import Embedding
 from keras.initializers import Constant
 from keras.optimizers import Adam, TFOptimizer
@@ -341,6 +341,7 @@ def encoder_decoderAdamBiggerLSTMCapacityOneEmbed(english_vocab_size, french_voc
     return model, encoder_model, decoder_model
 
 
+#Not implemented YET
 def encoder_decoderAdamWithoutTeacherForcing(english_vocab_size, french_vocab_size, max_words):
     # Encoder
     encoder_inputs = Input(shape=(None,))
@@ -393,6 +394,43 @@ def encoder_decoderAdamWithoutTeacherForcing(english_vocab_size, french_vocab_si
     decoder_outputs2 = decoder_dense(decoder_outputs2)
 
     # Final decoder model
+    decoder_model = Model(
+        [decoder_inputs] + decoder_states_inputs,
+        [decoder_outputs2] + decoder_states2)
+
+    return model, encoder_model, decoder_model
+
+
+def modelWithAttention(english_vocab_size, french_vocab_size, max_words):
+    encoder_inputs = Input(shape=(None,))
+    enc_emb = Embedding(english_vocab_size, latent_dim, mask_zero=True)(encoder_inputs)
+    encoder_lstm = LSTM(latent_dim * 10, return_state=True)
+    encoder_outputs, state_h, state_c = encoder_lstm(enc_emb)
+    encoder_states = [state_h, state_c]
+
+    decoder_inputs = Input(shape=(max_words, 1,))
+    decoder_lstm = LSTM(latent_dim * 10, return_sequences=True, return_state=True)
+    a = Permute((2, 1))(decoder_inputs)
+    a = Dense(max_words, activation='softmax')(a)
+    a_probs = Permute((2, 1), name='attention_vec')(a)
+    attention_mul = Concatenate([decoder_inputs, a_probs], name='attention_mul', mode='mul')
+    decoder_outputs, _, _ = decoder_lstm(attention_mul, initial_state=encoder_states)
+    decoder_dense = Dense(french_vocab_size, activation='softmax')
+    decoder_outputs = decoder_dense(decoder_outputs)
+
+    model = Model([encoder_inputs, decoder_inputs], decoder_outputs)
+    model.compile(optimizer='adam', loss='categorical_crossentropy', metrics=['acc'])
+
+    encoder_model = Model(encoder_inputs, encoder_states)
+
+    decoder_state_input_h = Input(shape=(latent_dim * 10,))
+    decoder_state_input_c = Input(shape=(latent_dim * 10,))
+    decoder_states_inputs = [decoder_state_input_h, decoder_state_input_c]
+
+    decoder_outputs2, state_h2, state_c2 = decoder_lstm(decoder_inputs, initial_state=decoder_states_inputs)
+    decoder_states2 = [state_h2, state_c2]
+    decoder_outputs2 = decoder_dense(decoder_outputs2)
+
     decoder_model = Model(
         [decoder_inputs] + decoder_states_inputs,
         [decoder_outputs2] + decoder_states2)
