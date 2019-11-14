@@ -1,6 +1,6 @@
 from keras.models import Sequential
 from keras.losses import sparse_categorical_crossentropy
-from keras.layers import GRU, LSTM, Dense, Dropout, Input, RepeatVector, CuDNNLSTM, Bidirectional, Permute, Reshape, Multiply
+from keras.layers import GRU, LSTM, Dense, Dropout, Input, RepeatVector, CuDNNLSTM, Bidirectional, Permute, Reshape, multiply
 from keras.layers.embeddings import Embedding
 from keras.initializers import Constant
 from keras.optimizers import Adam, TFOptimizer
@@ -413,7 +413,7 @@ def modelWithAttention(english_vocab_size, french_vocab_size, max_words):
     a = Permute((2, 1))(decoder_inputs)
     a = Dense(max_words, activation='softmax')(a)
     a_probs = Permute((2, 1), name='attention_vec')(a)
-    attention_mul = Multiply()(decoder_inputs, a_probs)
+    attention_mul = multiply(decoder_inputs, a_probs)
     decoder_outputs, _, _ = decoder_lstm(attention_mul, initial_state=encoder_states)
     decoder_dense = Dense(french_vocab_size, activation='softmax')
     decoder_outputs = decoder_dense(decoder_outputs)
